@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from services.video_upload_service.src.Domain.ValueObjects.duration import Duration
-from services.video_upload_service.src.Domain.ValueObjects.resolution import Resolution
+from Domain.ValueObjects.duration import Duration
+from Domain.ValueObjects.resolution import Resolution
 
 @dataclass
 class VideoMetadata:

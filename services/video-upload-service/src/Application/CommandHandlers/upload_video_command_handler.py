@@ -1,7 +1,7 @@
 from typing import Optional
-from services.video_upload_service.src.Domain.Aggregates.video_metadata_aggregate import VideoMetadataAggregate
-from services.video_upload_service.src.Domain.Contracts.video_metadata_write_repository import VideoMetadataWriteRepository
-from services.video_upload_service.src.Domain.Entities.video_metadata import VideoMetadata
+from Domain.Aggregates.video_metadata_aggregate import VideoMetadataAggregate
+from Domain.Contracts.video_metadata_write_repository import VideoMetadataWriteRepository
+from Domain.Entities.video_metadata import VideoMetadata
 
 class UploadVideoCommandHandler:
     """

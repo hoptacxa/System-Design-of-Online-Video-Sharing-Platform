@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from services.video_upload_service.src.Domain.ValueObjects.duration import Duration
-from services.video_upload_service.src.Domain.ValueObjects.resolution import Resolution
-from services.video_upload_service.src.Domain.Entities.video_metadata import VideoMetadata
+from Domain.ValueObjects.duration import Duration
+from Domain.ValueObjects.resolution import Resolution
+from Domain.Entities.video_metadata import VideoMetadata
 
 class VideoMetadataReadRepository(ABC):
     """

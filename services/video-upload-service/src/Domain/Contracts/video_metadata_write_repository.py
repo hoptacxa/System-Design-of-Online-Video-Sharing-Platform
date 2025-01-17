@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from services.video_upload_service.src.Domain.Entities.video_metadata import VideoMetadata
+from Domain.Entities.video_metadata import VideoMetadata
 
 class VideoMetadataWriteRepository(ABC):
     """

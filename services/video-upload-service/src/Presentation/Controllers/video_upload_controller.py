@@ -1,13 +1,15 @@
 # controllers/video_upload_controller.py
 
-from fastapi import APIRouter, HTTPException
-# from services.video_upload_service.src.Domain.Commands.upload_video_command import UploadVideoCommand
-# from services.video_upload_service.src.Domain.CommandHandlers.upload_video_command_handler import UploadVideoCommandHandler
-# from services.video_upload_service.src.Domain.ValueObjects.duration import Duration
-# from services.video_upload_service.src.Domain.ValueObjects.resolution import Resolution
-# from services.video_upload_service.src.Domain.Aggregates.video_metadata_aggregate import VideoMetadataAggregate
-# from services.video_upload_service.src.Domain.Entities.video_metadata import VideoMetadata
-from pydantic import BaseModel
+from fastapi import APIRouter, HTTPException, Depends
+# from Domain.Commands.upload_video_command import UploadVideoCommand
+# from Domain.CommandHandlers.upload_video_command_handler import UploadVideoCommandHandler
+# from Domain.ValueObjects.duration import Duration
+# from Domain.ValueObjects.resolution import Resolution
+# from Domain.Aggregates.video_metadata_aggregate import VideoMetadataAggregate
+# from Domain.Entities.video_metadata import VideoMetadata
+# from Infrastructure.Repositories.inmemory_video_metadata_read_repository import InMemoryVideoMetadataReadRepository, get_video_metadata_read_repository
+# from pydantic import BaseModel
+from Presentation.Requests.UploadVideoRequest import UploadVideoRequest
 
 # Initialize the router
 router = APIRouter()
@@ -24,12 +26,6 @@ router = APIRouter()
 # upload_video_command_handler = UploadVideoCommandHandler(video_metadata_aggregate)
 
 # Define Pydantic models for request validation
-class UploadVideoRequest(BaseModel):
-    user_id: int
-    resolution: str
-    duration: int  # Duration in seconds
-    file_key: str
-    thumbnail_key: str
 
 @router.post("/upload-video/")
 async def upload_video(request: UploadVideoRequest):

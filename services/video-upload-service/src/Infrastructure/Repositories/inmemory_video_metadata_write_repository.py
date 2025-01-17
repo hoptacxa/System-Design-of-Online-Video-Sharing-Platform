@@ -1,5 +1,5 @@
-from services.video_upload_service.src.Domain.Entities.video_metadata import VideoMetadata
-from services.video_upload_service.src.Domain.Contracts.video_metadata_write_repository import VideoMetadataWriteRepository
+from Domain.Entities.video_metadata import VideoMetadata
+from Domain.Contracts.video_metadata_write_repository import VideoMetadataWriteRepository
 
 class InMemoryVideoMetadataWriteRepository(VideoMetadataWriteRepository):
     def __init__(self):

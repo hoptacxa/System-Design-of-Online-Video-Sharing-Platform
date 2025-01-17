@@ -1,8 +1,8 @@
 from typing import Optional
-from services.video_upload_service.src.Domain.ValueObjects.duration import Duration
-from services.video_upload_service.src.Domain.ValueObjects.resolution import Resolution
-from services.video_upload_service.src.Domain.Entities.video_metadata import VideoMetadata
-from services.video_upload_service.src.Domain.Contracts.video_metadata_read_repository import VideoMetadataReadRepository
+from Domain.ValueObjects.duration import Duration
+from Domain.ValueObjects.resolution import Resolution
+from Domain.Entities.video_metadata import VideoMetadata
+from Domain.Contracts.video_metadata_read_repository import VideoMetadataReadRepository
 
 class VideoMetadataAggregate:
     """

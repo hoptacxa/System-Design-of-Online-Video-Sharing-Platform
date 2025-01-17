@@ -1,8 +1,8 @@
 from typing import List, Optional
-from services.video_upload_service.src.Domain.Entities.video_metadata import VideoMetadata
-from services.video_upload_service.src.Domain.ValueObjects.duration import Duration
-from services.video_upload_service.src.Domain.ValueObjects.resolution import Resolution
-from services.video_upload_service.src.Domain.Contracts.video_metadata_read_repository import VideoMetadataReadRepository
+from Domain.Entities.video_metadata import VideoMetadata
+from Domain.ValueObjects.duration import Duration
+from Domain.ValueObjects.resolution import Resolution
+from Domain.Contracts.video_metadata_read_repository import VideoMetadataReadRepository
 
 class InMemoryVideoMetadataReadRepository(VideoMetadataReadRepository):
     def __init__(self):
@@ -19,3 +19,6 @@ class InMemoryVideoMetadataReadRepository(VideoMetadataReadRepository):
 
     def get_by_duration_range(self, min_duration: Duration, max_duration: Duration) -> List[VideoMetadata]:
         return [video for video in self._video_metadata_store.values() if min_duration.value <= video.duration.value <= max_duration.value]
+
+def get_video_metadata_read_repository() -> InMemoryVideoMetadataReadRepository:
+    return InMemoryVideoMetadataReadRepository()
