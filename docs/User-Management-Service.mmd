@@ -1,0 +1,11 @@
+erDiagram
+    User {
+        int id
+    }
+    AccessKey {
+        int id
+        string key
+        date created_at
+        int user_id
+    }
+    User ||--o{ AccessKey : "has"
