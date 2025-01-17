@@ -1,0 +1,5 @@
+#!/bin/bash
+set -xeo pipefail
+
+echo $@ > "./last-test-matcher.txt"
+PYTHONPATH=./services/video-upload-service/src pytest --maxfail=1 --pdb $@

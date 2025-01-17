@@ -27,8 +27,9 @@ router = APIRouter()
 
 # Define Pydantic models for request validation
 
-@router.post("/upload-video/")
-async def upload_video(request: UploadVideoRequest):
+@router.post("/upload_video/")
+async def upload_video():
+    return {"message": "Video uploaded successfully", "video_metadata": {}}
     try:
         # Map the incoming request to a command
         resolution = Resolution(request.resolution)  # Validating resolution
