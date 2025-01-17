@@ -1,9 +1,8 @@
 from pydantic import BaseModel
 from typing import Optional
-from fastapi import UploadFile
-from fastapi import UploadFile, File
+from fastapi import UploadFile, File, Form
 
 class UploadVideoRequest(BaseModel):
-    # video_file: UploadFile = File(...),
-    title: str
-    description: Optional[str] = None
+    video_file: UploadFile = Form(...),
+    # title: str = Form(...)
+    # description: Optional[str] = Form(None)
