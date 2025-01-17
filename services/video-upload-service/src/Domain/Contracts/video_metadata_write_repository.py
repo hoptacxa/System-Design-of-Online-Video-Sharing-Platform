@@ -13,7 +13,8 @@ class VideoMetadataWriteRepository(ABC):
         
         :param video_metadata: The VideoMetadata entity to save.
         """
-        pass
+        # pass
+        print("Saving video metadata")
 
     @abstractmethod
     def update(self, video_metadata: VideoMetadata) -> None:
@@ -23,3 +24,6 @@ class VideoMetadataWriteRepository(ABC):
         :param video_metadata: The VideoMetadata entity to update.
         """
         pass
+
+def get_video_metadata_write_repository() -> VideoMetadataWriteRepository:
+    return VideoMetadataWriteRepository()

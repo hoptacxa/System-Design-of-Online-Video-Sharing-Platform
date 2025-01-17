@@ -39,7 +39,7 @@ async def upload_video(request: Annotated[UploadVideoRequest, Form()], command_h
         )
         
         # Handle the command through the handler
-        # video_metadata = upload_video_command_handler.handle(command)
+        video_metadata = command_handler.handle(command)
         
         return {"message": "Video uploaded successfully. Uploaded file: " + request.video_file.filename}
         if video_metadata:
