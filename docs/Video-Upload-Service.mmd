@@ -4,18 +4,21 @@ erDiagram
     }
     VIDEO_METADATA {
         int id PK
-        string title
-        string description
-        string file_path
-        string thumbnail_url
-        datetime uploaded_at
         int user_id FK
-        int bucket_id FK
+        string file_key
+        string thumbnail_key
+        int duration
+        string resolution
     }
     STORAGE_BUCKET {
         int id PK
         string bucket_name
         string region
     }
+    VIDEO_BUCKET_RELATIONSHIP {
+        int video_id FK
+        int bucket_id FK
+    }
     USER ||--o{ VIDEO_METADATA: "uploads"
-    VIDEO_METADATA }o--|| STORAGE_BUCKET: "stored_in"
+    VIDEO_METADATA }o--o{ VIDEO_BUCKET_RELATIONSHIP: "linked_to"
+    STORAGE_BUCKET ||--o{ VIDEO_BUCKET_RELATIONSHIP: "contains"
