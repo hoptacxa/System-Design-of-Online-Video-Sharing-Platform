@@ -1,0 +1,7 @@
+services:
+  video-upload-service:
+    build:
+      context: .
+      dockerfile: dockerfiles/video-upload-service/Dockerfile
+    ports:
+      - "3000:80"
