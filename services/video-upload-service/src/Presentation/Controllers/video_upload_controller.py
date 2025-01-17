@@ -3,10 +3,10 @@ from fastapi import UploadFile, File, Form
 from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, Depends
-# from Domain.Commands.upload_video_command import UploadVideoCommand
-# from Domain.CommandHandlers.upload_video_command_handler import UploadVideoCommandHandler
-# from Domain.ValueObjects.duration import Duration
-# from Domain.ValueObjects.resolution import Resolution
+from Application.Commands.upload_video_command import UploadVideoCommand
+from Application.CommandHandlers.upload_video_command_handler import UploadVideoCommandHandler, get_upload_video_command_handler
+from Domain.ValueObjects.duration import Duration
+from Domain.ValueObjects.resolution import Resolution
 # from Domain.Aggregates.video_metadata_aggregate import VideoMetadataAggregate
 # from Domain.Entities.video_metadata import VideoMetadata
 # from Infrastructure.Repositories.inmemory_video_metadata_read_repository import InMemoryVideoMetadataReadRepository, get_video_metadata_read_repository
@@ -29,25 +29,19 @@ router = APIRouter()
 
 # Define Pydantic models for request validation
 
-@router.post("/upload_video/")
-async def upload_video(request: Annotated[UploadVideoRequest, Form()]):
-    return {"message": "Video uploaded successfully. Uploaded file: " + request.video_file.filename}
-    try:
-        # Map the incoming request to a command
-        resolution = Resolution(request.resolution)  # Validating resolution
-        duration = Duration(request.duration)  # Validating duration
 
+@router.post("/upload_video/", response_model=dict)
+async def upload_video(request: Annotated[UploadVideoRequest, Form()], command_handler: UploadVideoCommandHandler = Depends(get_upload_video_command_handler)):
+    try:
         command = UploadVideoCommand(
-            user_id=request.user_id,
+            user_id=1,
             file_key=request.file_key,
-            thumbnail_key=request.thumbnail_key,
-            duration=duration,
-            resolution=resolution
         )
         
         # Handle the command through the handler
-        video_metadata = upload_video_command_handler.handle(command)
+        # video_metadata = upload_video_command_handler.handle(command)
         
+        return {"message": "Video uploaded successfully. Uploaded file: " + request.video_file.filename}
         if video_metadata:
             return {"message": "Video uploaded successfully", "video_metadata": video_metadata}
         else:

@@ -17,9 +17,9 @@ class VideoMetadataAggregate:
         self,
         user_id: int,
         file_key: str,
-        thumbnail_key: str,
-        duration: Duration,
-        resolution: Resolution
+        # thumbnail_key: str,
+        # duration: Duration,
+        # resolution: Resolution
     ) -> VideoMetadata:
         """
         Creates a new VideoMetadata instance, ensuring that the business rules are respected.
@@ -36,13 +36,13 @@ class VideoMetadataAggregate:
             id=self._generate_new_id(),
             user_id=user_id,
             file_key=file_key,
-            thumbnail_key=thumbnail_key,
-            duration=duration,
-            resolution=resolution
+            # thumbnail_key=thumbnail_key,
+            # duration=duration,
+            # resolution=resolution
         )
         
         # You might save it to the repository here (assuming repository has a save method)
-        self._repository.save(video_metadata)
+        # self._repository.save(video_metadata)
         
         return video_metadata
 

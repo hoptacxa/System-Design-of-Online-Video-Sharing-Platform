@@ -17,7 +17,9 @@ def test_successful_video_upload():
     with filename.open("rb") as file:
         response = client.post(
             "/upload_video/",
-            data={"title": "test"},
+            data={
+                "file_key": "test"
+            },
             files={"video_file": ("test.mp4", file)},
         )
     

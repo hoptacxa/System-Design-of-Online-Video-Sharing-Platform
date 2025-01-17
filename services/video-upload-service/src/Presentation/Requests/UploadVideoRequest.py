@@ -7,4 +7,6 @@ class UploadVideoRequest(BaseModel):
     video_file: UploadFile = File(description="Multiple files as bytes"),
     # video_file: UploadFile = Form(...),
     # title: str = Form(...)
-    title: str
+    file_key: str
+    # resolution: str
+    # duration: int
