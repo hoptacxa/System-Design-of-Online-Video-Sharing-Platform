@@ -1,0 +1,21 @@
+erDiagram
+    USER {
+        int id PK
+    }
+    VIDEO_METADATA {
+        int id PK
+        string title
+        string description
+        string file_path
+        string thumbnail_url
+        datetime uploaded_at
+        int user_id FK
+        int bucket_id FK
+    }
+    STORAGE_BUCKET {
+        int id PK
+        string bucket_name
+        string region
+    }
+    USER ||--o{ VIDEO_METADATA: "uploads"
+    VIDEO_METADATA }o--|| STORAGE_BUCKET: "stored_in"
