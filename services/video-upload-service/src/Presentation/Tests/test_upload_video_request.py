@@ -17,8 +17,8 @@ def test_successful_video_upload():
     with filename.open("rb") as file:
         response = client.post(
             "/upload_video/",
-            json={"title": "test"},
-            files={"files": ("test.mp4", file)},
+            data={"title": "test"},
+            files={"video_file": ("test.mp4", file)},
         )
     
     # Assert the status code is 200 (OK)

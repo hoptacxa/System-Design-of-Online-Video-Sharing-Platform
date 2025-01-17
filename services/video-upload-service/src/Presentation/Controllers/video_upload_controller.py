@@ -1,5 +1,6 @@
 # controllers/video_upload_controller.py
 from fastapi import UploadFile, File, Form
+from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, Depends
 # from Domain.Commands.upload_video_command import UploadVideoCommand
@@ -29,10 +30,8 @@ router = APIRouter()
 # Define Pydantic models for request validation
 
 @router.post("/upload_video/")
-async def upload_video(
-    files: UploadFile,
-):
-    return {"message": "Video uploaded successfully. Uploaded file: " + files.filename}
+async def upload_video(request: Annotated[UploadVideoRequest, Form()]):
+    return {"message": "Video uploaded successfully. Uploaded file: " + request.video_file.filename}
     try:
         # Map the incoming request to a command
         resolution = Resolution(request.resolution)  # Validating resolution
