@@ -5,7 +5,7 @@ from uuid import UUID
 @dataclass
 class VideoMetadata:
     uuid: UUID
-    user_id: int
+    user_uuid: UUID
     title: Title
     description: Description
     file_key: FileKey

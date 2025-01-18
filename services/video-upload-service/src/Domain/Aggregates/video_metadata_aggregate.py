@@ -19,7 +19,7 @@ class VideoMetadataAggregate:
         file_key: FileKey,
         duration: Duration,
         resolution: Resolution,
-        user_id: int,
+        user_uuid: UUID,
         # storage_buckets: List[StorageBucket],
     ):
         print("VideoMetadataAggregate")
@@ -46,7 +46,7 @@ class VideoMetadataAggregate:
         self.file_key = file_key
         self.duration = duration
         self.resolution = resolution
-        self.user_id = user_id
+        self.user_uuid = user_uuid
         # self._storage_buckets = storage_buckets
 
     # @property

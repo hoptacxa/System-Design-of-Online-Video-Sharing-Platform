@@ -11,10 +11,12 @@ class VideoMetadataModel(SQLModel, table=True):
     __tablename__ = "video_metadata"
 
     uuid: UUID = Field(default_factory=uuid4, primary_key=True)
+    user_uuid: UUID = Field()
     title: str
     description: Optional[str] = None
-    # created_at: datetime = Field(default_factory=datetime.utcnow)
-    # updated_at: datetime = Field(default_factory=datetime.utcnow)
+    file_key: str
+    duration: int
+    resolution: str
 
     # Relationship to link storage buckets
     # storage_bucket_links: List[VideoMetadataStorageBucketLinkModel] = Relationship(back_populates="video_metadata")

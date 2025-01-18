@@ -4,9 +4,13 @@ from Presentation.Routes.main import app
 from io import BytesIO
 from fastapi import UploadFile
 from pathlib import Path
+from Infrastructure.Repositories.database_engine import DatabaseEngine
 
 # Create a TestClient instance for testing FastAPI endpoints
 client = TestClient(app)
+database_engine = DatabaseEngine()
+database_engine.create_db_and_tables()
+app.dependency_overrides[DatabaseEngine] = lambda: database_engine
 
 # Test: successful video upload
 def test_successful_video_upload():

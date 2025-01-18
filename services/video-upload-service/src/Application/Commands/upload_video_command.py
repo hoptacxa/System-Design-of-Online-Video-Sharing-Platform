@@ -14,14 +14,14 @@ class UploadVideoCommand:
         description: str,
         duration: int,
         resolution: str,
-        user_id: int,
+        user_uuid: str,
         file_key: str
     ): # , thumbnail_key: str, duration: Duration, resolution: Resolution
         self.uuid = uuid
         self.title = title
         self.description = description
         self.duration = duration
-        self.user_id = user_id
+        self.user_uuid = user_uuid
         self.file_key = file_key
         self.resolution = resolution
         # self.thumbnail_key = thumbnail_key

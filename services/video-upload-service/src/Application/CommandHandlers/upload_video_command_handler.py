@@ -21,7 +21,7 @@ class UploadVideoCommandHandler:
         # Delegate the creation of video metadata to the aggregate.
         new_video_metadata = VideoMetadataAggregate(
             uuid=command.uuid,
-            user_id=command.user_id,
+            user_uuid=command.user_uuid,
             title=command.title,
             description=command.description,
             file_key=command.file_key,

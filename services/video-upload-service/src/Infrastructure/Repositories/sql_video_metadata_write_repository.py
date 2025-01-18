@@ -1,6 +1,7 @@
 from typing import Optional, List
 from sqlmodel import Session, select, delete
 from Domain.Aggregates.video_metadata_aggregate import VideoMetadataAggregate
+from Domain.Entities.video_metadata import VideoMetadata
 from Infrastructure.Models.storage_bucket_model import StorageBucketModel
 from Infrastructure.Models.video_metadata_model import VideoMetadataModel
 # from Infrastructure.Models.video_metadata_storage_bucket_link_model import VideoMetadataStorageBucketLinkModel as VideoMetadataStorageBucketLink
@@ -21,7 +22,7 @@ class SqlVideoMetadataWriteRepository(VideoMetadataWriteRepository):
             entity = VideoMetadataMapper.to_entity(aggregate)
             new_video_metadata = VideoMetadataModel(
                 uuid=entity.uuid,
-                user_id=entity.user_id,
+                user_uuid=entity.user_uuid,
                 title=entity.title,
                 description=entity.description,
                 file_key=entity.file_key,
@@ -40,14 +41,27 @@ class SqlVideoMetadataWriteRepository(VideoMetadataWriteRepository):
             #         session.add(link)
 
             session.commit()
-            return aggregate
-            return aggregate
-            session.refresh(entity)
+            session.refresh(new_video_metadata)
 
-            return VideoMetadataMapper.from_entity(entity, aggregate.storage_buckets)
+            return SqlVideoMetadataWriteRepository.to_aggregate(new_video_metadata)
         except Exception as e:
             session.rollback()
             raise RuntimeError(f"Error saving video upload: {str(e)}")
+
+    def to_aggregate(model: VideoMetadataModel) -> VideoMetadataAggregate:
+        entity = SqlVideoMetadataWriteRepository.to_entity(model)
+        return VideoMetadataMapper.from_entity(entity, [])
+
+    def to_entity(model: VideoMetadataModel) -> VideoMetadata:
+        return VideoMetadata(
+            uuid=model.uuid,
+            user_uuid=model.user_uuid,
+            file_key=model.file_key,
+            title=model.title,
+            description=model.description,
+            duration=model.duration,
+            resolution=model.resolution
+        )
 
     def update(self, aggregate: VideoMetadataAggregate, session: Session) -> Optional[VideoMetadataAggregate]:
         """

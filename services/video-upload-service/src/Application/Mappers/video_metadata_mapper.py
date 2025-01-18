@@ -15,7 +15,7 @@ class VideoMetadataMapper:
         """Convert VideoMetadataAggregate to VideoMetadata entity."""
         entity = VideoMetadata(
             uuid=aggregate.uuid,
-            user_id=aggregate.user_id,
+            user_uuid=aggregate.user_uuid,
             title=aggregate.title,
             description=aggregate.description,
             file_key=aggregate.file_key,
@@ -27,14 +27,15 @@ class VideoMetadataMapper:
     @staticmethod
     def from_entity(entity: VideoMetadata, buckets: List[StorageBucket]) -> VideoMetadataAggregate:
         """Convert VideoMetadata entity and associated buckets to VideoMetadataAggregate."""
-        raise NotImplementedError("Not implemented")
-        # aggregate = VideoMetadataAggregate(
-        #     uuid=entity.id,
-        #     title=entity.title,
-        #     description=entity.description,
-        #     created_at=entity.created_at,
-        #     updated_at=entity.updated_at,
-        #     storage_buckets=buckets,
-        # )
-        return aggregate
 
+        aggregate = VideoMetadataAggregate(
+            uuid=entity.uuid,
+            title=entity.title,
+            user_uuid=entity.user_uuid,
+            file_key=entity.file_key,
+            duration=entity.duration,
+            resolution=entity.resolution,
+            description=entity.description,
+        )
+
+        return aggregate

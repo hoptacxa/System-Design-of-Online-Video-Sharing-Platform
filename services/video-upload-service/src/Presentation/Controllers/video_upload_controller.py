@@ -41,7 +41,7 @@ async def upload_video(
             description=request.description,
             resolution=request.resolution,
             duration=request.duration,
-            user_id=1,
+            user_uuid=uuid4(),
             file_key=request.file_key,
         )
         

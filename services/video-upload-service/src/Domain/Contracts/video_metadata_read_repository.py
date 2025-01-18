@@ -20,11 +20,11 @@ class VideoMetadataReadRepository(ABC):
         pass
 
     @abstractmethod
-    def get_all_by_user(self, user_id: int) -> List[VideoMetadata]:
+    def get_all_by_user(self, user_uuid: int) -> List[VideoMetadata]:
         """
         Fetches all video metadata uploaded by a specific user.
         
-        :param user_id: The ID of the user whose videos are to be fetched.
+        :param user_uuid: The ID of the user whose videos are to be fetched.
         :return: List of VideoMetadata objects.
         """
         pass
