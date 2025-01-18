@@ -18,6 +18,10 @@ def test_successful_video_upload():
         response = client.post(
             "/upload_video/",
             data={
+                "title": "test",
+                "description": "test",
+                "duration": 1,
+                "resolution": "1080p",
                 "file_key": "test"
             },
             files={"video_file": ("test.mp4", file)},

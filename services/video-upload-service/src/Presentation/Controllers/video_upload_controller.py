@@ -1,6 +1,7 @@
 # controllers/video_upload_controller.py
 from fastapi import UploadFile, File, Form
 from typing import Annotated
+from uuid import uuid4
 
 from fastapi import APIRouter, HTTPException, Depends
 from Application.Commands.upload_video_command import UploadVideoCommand
@@ -34,6 +35,11 @@ router = APIRouter()
 async def upload_video(request: Annotated[UploadVideoRequest, Form()], command_handler: UploadVideoCommandHandler = Depends(get_upload_video_command_handler)):
     try:
         command = UploadVideoCommand(
+            uuid=uuid4(),
+            title=request.title,
+            description=request.description,
+            resolution=request.resolution,
+            duration=request.duration,
             user_id=1,
             file_key=request.file_key,
         )
@@ -49,4 +55,5 @@ async def upload_video(request: Annotated[UploadVideoRequest, Form()], command_h
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))  # Handle invalid input
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail="Internal Server Error")

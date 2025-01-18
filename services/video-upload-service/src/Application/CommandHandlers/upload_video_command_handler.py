@@ -3,6 +3,7 @@ from fastapi import Depends
 from Domain.Contracts.video_metadata_write_repository import VideoMetadataWriteRepository
 from Infrastructure.Repositories.inmemory_video_metadata_write_repository import get_video_metadata_write_repository
 from Domain.Entities.video_metadata import VideoMetadata
+from Domain.Aggregates.video_metadata_aggregate import VideoMetadataAggregate
 from Application.Commands.upload_video_command import UploadVideoCommand
 from typing import Annotated
 
@@ -11,9 +12,15 @@ class UploadVideoCommandHandler:
         self._write_repository = write_repository
 
     def handle(self, command: UploadVideoCommand):
-        # return 
         # Delegate the creation of video metadata to the aggregate.
-        # VideoMetadataAggregate(self._write_repository)
+        new_video_metadata = VideoMetadataAggregate(
+            uuid=command.uuid,
+            title=command.title,
+            description=command.description,
+            file_key=command.file_key,
+            duration=command.duration,
+            resolution=command.resolution,
+        )
         # videoMetadataAggregate = self._write_repository.save(
         #     user_id=command.user_id,
         #     file_key=command.file_key,

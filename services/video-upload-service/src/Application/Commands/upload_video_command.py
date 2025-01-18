@@ -7,9 +7,23 @@ class UploadVideoCommand:
     to create a new VideoMetadata instance.
     """
 
-    def __init__(self, user_id: int, file_key: str): # , thumbnail_key: str, duration: Duration, resolution: Resolution
+    def __init__(
+        self,
+        uuid: str,
+        title: str,
+        description: str,
+        duration: int,
+        resolution: str,
+        user_id: int,
+        file_key: str
+    ): # , thumbnail_key: str, duration: Duration, resolution: Resolution
+        self.uuid = uuid
+        self.title = title
+        self.description = description
+        self.duration = duration
         self.user_id = user_id
         self.file_key = file_key
+        self.resolution = resolution
         # self.thumbnail_key = thumbnail_key
         # self.duration = duration
         # self.resolution = resolution

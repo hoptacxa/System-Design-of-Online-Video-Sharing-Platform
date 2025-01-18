@@ -5,8 +5,8 @@ from typing import List
 
 class UploadVideoRequest(BaseModel):
     video_file: UploadFile = File(description="Multiple files as bytes"),
-    # video_file: UploadFile = Form(...),
-    # title: str = Form(...)
+    title: str
+    description: str
     file_key: str
-    # resolution: str
-    # duration: int
+    resolution: str
+    duration: int
