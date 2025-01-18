@@ -1,7 +1,7 @@
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional, List
 from datetime import datetime
-from Infrastructure.Models.video_metadata_storage_bucket_link_model import VideoMetadataStorageBucketLinkModel
+# from Infrastructure.Models.video_metadata_storage_bucket_link_model import VideoMetadataStorageBucketLinkModel
 
 class StorageBucketModel(SQLModel, table=True):
     """
@@ -14,5 +14,5 @@ class StorageBucketModel(SQLModel, table=True):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
     # Relationship to link video metadata
-    video_metadata_links: List[VideoMetadataStorageBucketLinkModel] = Relationship(back_populates="storage_bucket")
+    # video_metadata_links: List[VideoMetadataStorageBucketLinkModel] = Relationship(back_populates="storage_bucket")
 

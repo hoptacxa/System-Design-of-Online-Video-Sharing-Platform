@@ -8,8 +8,8 @@ class VideoMetadataStorageBucketLinkModel(SQLModel, table=True):
     """
     Represents the many-to-many link between VideoMetadataModel and StorageBucketModel.
     """
-    video_metadata_id: int = Field(foreign_key="videometadatamodel.uuid", primary_key=True)
-    storage_bucket_id: int = Field(foreign_key="storagebucketmodel.uuid", primary_key=True)
+    video_metadata_id: int = Field()
+    storage_bucket_id: int = Field()
 
     # Relationships
     # video_metadata: VideoMetadataModel = Relationship(back_populates="storage_bucket_links")

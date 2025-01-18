@@ -1,9 +1,9 @@
 from typing import Optional, List
 from sqlmodel import Session, select, delete
 from Domain.Aggregates.video_metadata_aggregate import VideoMetadataAggregate
-from Infrastructure.Models.storage_bucket_model import StorageBucketModel as StorageBucket
-from Infrastructure.Models.video_metadata_model import VideoMetadataModel as VideoMetadata
-from Infrastructure.Models.video_metadata_storage_bucket_link_model import VideoMetadataStorageBucketLinkModel as VideoMetadataStorageBucketLink
+from Infrastructure.Models.storage_bucket_model import StorageBucketModel
+from Infrastructure.Models.video_metadata_model import VideoMetadataModel
+# from Infrastructure.Models.video_metadata_storage_bucket_link_model import VideoMetadataStorageBucketLinkModel as VideoMetadataStorageBucketLink
 from Application.Mappers.video_metadata_mapper import VideoMetadataMapper
 from Domain.Contracts.video_metadata_write_repository import VideoMetadataWriteRepository
 
@@ -12,26 +12,36 @@ class SqlVideoMetadataWriteRepository(VideoMetadataWriteRepository):
     Repository for managing video uploads, explicitly handling VideoMetadataStorageBucketLink persistence.
     """
 
-    def save(aggregate: VideoMetadataAggregate, session: Session) -> VideoMetadataAggregate:
+    def save(self, aggregate: VideoMetadataAggregate, session: Session) -> VideoMetadataAggregate:
         """
         Saves a VideoMetadataAggregate to the database, explicitly persisting VideoMetadataStorageBucketLink relationships.
         """
         
-        return aggregate
         try:
             entity = VideoMetadataMapper.to_entity(aggregate)
-            session.add(entity)
+            new_video_metadata = VideoMetadataModel(
+                uuid=entity.uuid,
+                user_id=entity.user_id,
+                title=entity.title,
+                description=entity.description,
+                file_key=entity.file_key,
+                duration=entity.duration,
+                resolution=entity.resolution
+            )
+            session.add(instance=new_video_metadata)
 
             # Persist bucket links
-            for bucket in aggregate.storage_buckets:
-                bucket_entity = session.get(StorageBucket, bucket.uuid)
-                if bucket_entity:
-                    link = VideoMetadataStorageBucketLink(
-                        video_metadata_id=entity.uuid, storage_bucket_id=bucket_entity.uuid
-                    )
-                    session.add(link)
+            # for bucket in aggregate.storage_buckets:
+            #     bucket_entity = session.get(StorageBucket, bucket.uuid)
+            #     if bucket_entity:
+            #         link = VideoMetadataStorageBucketLink(
+            #             video_metadata_id=entity.uuid, storage_bucket_id=bucket_entity.uuid
+            #         )
+            #         session.add(link)
 
             session.commit()
+            return aggregate
+            return aggregate
             session.refresh(entity)
 
             return VideoMetadataMapper.from_entity(entity, aggregate.storage_buckets)

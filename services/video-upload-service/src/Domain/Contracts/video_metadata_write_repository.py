@@ -10,7 +10,7 @@ class VideoMetadataWriteRepository(ABC):
     """
 
     @abstractmethod
-    def save(aggregate: VideoMetadataAggregate, session: Session) -> VideoMetadataAggregate:
+    def save(self, aggregate: VideoMetadataAggregate, session: Session) -> VideoMetadataAggregate:
         """
         Persist a VideoMetadataAggregate in the database.
         """

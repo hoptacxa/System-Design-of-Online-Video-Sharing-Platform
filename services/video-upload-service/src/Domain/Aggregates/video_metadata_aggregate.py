@@ -19,6 +19,7 @@ class VideoMetadataAggregate:
         file_key: FileKey,
         duration: Duration,
         resolution: Resolution,
+        user_id: int,
         # storage_buckets: List[StorageBucket],
     ):
         print("VideoMetadataAggregate")
@@ -39,13 +40,14 @@ class VideoMetadataAggregate:
     #     ):
     #         raise ValueError("Storage buckets must be a list of StorageBucket instances.")
 
-    #     self.uuid = uuid
-    #     self.title = title
-    #     self.description = description
-    #     self.file_key = file_key
-    #     self.duration = duration
-    #     self.resolution = resolution
-    #     self._storage_buckets = storage_buckets
+        self.uuid = uuid
+        self.title = title
+        self.description = description
+        self.file_key = file_key
+        self.duration = duration
+        self.resolution = resolution
+        self.user_id = user_id
+        # self._storage_buckets = storage_buckets
 
     # @property
     # def storage_buckets(self) -> List[StorageBucket]:

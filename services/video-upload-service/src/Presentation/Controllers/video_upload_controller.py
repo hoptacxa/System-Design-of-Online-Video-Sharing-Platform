@@ -5,7 +5,7 @@ from uuid import uuid4
 
 from fastapi import APIRouter, HTTPException, Depends
 from Application.Commands.upload_video_command import UploadVideoCommand
-from Application.CommandHandlers.upload_video_command_handler import UploadVideoCommandHandler, get_upload_video_command_handler
+from Application.CommandHandlers.upload_video_command_handler import UploadVideoCommandHandler
 from Domain.ValueObjects.duration import Duration
 from Domain.ValueObjects.resolution import Resolution
 # from Domain.Aggregates.video_metadata_aggregate import VideoMetadataAggregate
@@ -28,11 +28,12 @@ router = APIRouter()
 
 # upload_video_command_handler = UploadVideoCommandHandler(video_metadata_aggregate)
 
-# Define Pydantic models for request validation
-
 
 @router.post("/upload_video/", response_model=dict)
-async def upload_video(request: Annotated[UploadVideoRequest, Form()], command_handler: UploadVideoCommandHandler = Depends(get_upload_video_command_handler)):
+async def upload_video(
+    request: Annotated[UploadVideoRequest, Form()], 
+    command_handler: UploadVideoCommandHandler = Depends()
+):
     try:
         command = UploadVideoCommand(
             uuid=uuid4(),

@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 from Domain.ValueObjects import duration as Duration, resolution as Resolution, title as Title, description as Description, file_key as FileKey
+from uuid import UUID
 
 @dataclass
 class VideoMetadata:
-    id: int
+    uuid: UUID
     user_id: int
     title: Title
     description: Description
