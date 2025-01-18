@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 from sqlmodel import Session
+from Domain.Aggregates.video_metadata_aggregate import VideoMetadataAggregate
 
 
 class VideoMetadataWriteRepository(ABC):
@@ -9,57 +10,29 @@ class VideoMetadataWriteRepository(ABC):
     """
 
     @abstractmethod
-    def save(self, aggregate: "VideoUploadAggregate", session: Session) -> "VideoUploadAggregate":
+    def save(aggregate: VideoMetadataAggregate, session: Session) -> VideoMetadataAggregate:
         """
-        Save video metadata to the data source.
-
-        Args:
-            aggregate (VideoUploadAggregate): The aggregate containing video metadata.
-            session (Session): The database session.
-
-        Returns:
-            VideoUploadAggregate: The saved aggregate.
+        Persist a VideoMetadataAggregate in the database.
         """
         pass
 
     @abstractmethod
-    def update(self, aggregate: "VideoUploadAggregate", session: Session) -> Optional["VideoUploadAggregate"]:
+    def update(self, aggregate: VideoMetadataAggregate, session: Session) -> Optional[VideoMetadataAggregate]:
         """
-        Update video metadata in the data source.
-
-        Args:
-            aggregate (VideoUploadAggregate): The aggregate containing video metadata.
-            session (Session): The database session.
-
-        Returns:
-            Optional[VideoUploadAggregate]: The updated aggregate or None if not found.
+        Update an existing VideoMetadataAggregate in the database.
         """
         pass
 
     @abstractmethod
     def delete(self, video_id: int, session: Session) -> bool:
         """
-        Delete video metadata from the data source.
-
-        Args:
-            video_id (int): The ID of the video to delete.
-            session (Session): The database session.
-
-        Returns:
-            bool: True if the deletion was successful, False otherwise.
+        Delete a VideoMetadataAggregate and associated relationships by ID.
         """
         pass
 
     @abstractmethod
-    def get_by_id(self, video_id: int, session: Session) -> Optional["VideoUploadAggregate"]:
+    def get_by_id(self, video_id: int, session: Session) -> Optional[VideoMetadataAggregate]:
         """
-        Retrieve video metadata by ID.
-
-        Args:
-            video_id (int): The ID of the video to retrieve.
-            session (Session): The database session.
-
-        Returns:
-            Optional[VideoUploadAggregate]: The retrieved aggregate or None if not found.
+        Retrieve a VideoMetadataAggregate by ID, including related entities.
         """
         pass

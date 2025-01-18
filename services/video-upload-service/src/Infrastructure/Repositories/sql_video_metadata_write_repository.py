@@ -5,26 +5,29 @@ from Infrastructure.Models.storage_bucket_model import StorageBucketModel as Sto
 from Infrastructure.Models.video_metadata_model import VideoMetadataModel as VideoMetadata
 from Infrastructure.Models.video_metadata_storage_bucket_link_model import VideoMetadataStorageBucketLinkModel as VideoMetadataStorageBucketLink
 from Application.Mappers.video_metadata_mapper import VideoMetadataMapper
+from Domain.Contracts.video_metadata_write_repository import VideoMetadataWriteRepository
 
-class VideoMetadataRepository:
+class SqlVideoMetadataWriteRepository(VideoMetadataWriteRepository):
     """
     Repository for managing video uploads, explicitly handling VideoMetadataStorageBucketLink persistence.
     """
 
-    def save(self, aggregate: VideoMetadataAggregate, session: Session) -> VideoMetadataAggregate:
+    def save(aggregate: VideoMetadataAggregate, session: Session) -> VideoMetadataAggregate:
         """
         Saves a VideoMetadataAggregate to the database, explicitly persisting VideoMetadataStorageBucketLink relationships.
         """
+        
+        return aggregate
         try:
             entity = VideoMetadataMapper.to_entity(aggregate)
             session.add(entity)
 
             # Persist bucket links
             for bucket in aggregate.storage_buckets:
-                bucket_entity = session.get(StorageBucket, bucket.id)
+                bucket_entity = session.get(StorageBucket, bucket.uuid)
                 if bucket_entity:
                     link = VideoMetadataStorageBucketLink(
-                        video_metadata_id=entity.id, storage_bucket_id=bucket_entity.id
+                        video_metadata_id=entity.uuid, storage_bucket_id=bucket_entity.uuid
                     )
                     session.add(link)
 
@@ -41,7 +44,7 @@ class VideoMetadataRepository:
         Updates a VideoMetadataAggregate in the database, including VideoMetadataStorageBucketLink relationships.
         """
         try:
-            entity = session.get(VideoMetadata, aggregate.id)
+            entity = session.get(VideoMetadata, aggregate.uuid)
             if not entity:
                 return None
 
@@ -53,10 +56,10 @@ class VideoMetadataRepository:
 
             # Update bucket links
             session.exec(
-                delete(VideoMetadataStorageBucketLink).where(VideoMetadataStorageBucketLink.video_metadata_id == entity.id)
+                delete(VideoMetadataStorageBucketLink).where(VideoMetadataStorageBucketLink.video_metadata_id == entity.uuid)
             )
             for bucket in aggregate.storage_buckets:
-                session.add(VideoMetadataStorageBucketLink(video_metadata_id=entity.id, storage_bucket_id=bucket.id))
+                session.add(VideoMetadataStorageBucketLink(video_metadata_id=entity.uuid, storage_bucket_id=bucket.uuid))
 
             session.commit()
             session.refresh(entity)
@@ -97,10 +100,14 @@ class VideoMetadataRepository:
             # Retrieve linked storage buckets
             buckets = session.exec(
                 select(StorageBucket)
-                .join(VideoMetadataStorageBucketLink, StorageBucket.id == VideoMetadataStorageBucketLink.storage_bucket_id)
+                .join(VideoMetadataStorageBucketLink, StorageBucket.uuid == VideoMetadataStorageBucketLink.storage_bucket_id)
                 .where(VideoMetadataStorageBucketLink.video_metadata_id == video_id)
             ).all()
 
             return VideoMetadataMapper.from_entity(entity, buckets)
         except Exception as e:
             raise RuntimeError(f"Error retrieving video upload: {str(e)}")
+
+
+def get_video_metadata_write_repository() -> VideoMetadataWriteRepository:
+    return SqlVideoMetadataWriteRepository()
