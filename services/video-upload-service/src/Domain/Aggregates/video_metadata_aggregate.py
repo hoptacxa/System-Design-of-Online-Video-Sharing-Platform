@@ -5,14 +5,6 @@ from Domain.Entities.video_metadata import VideoMetadata
 from Domain.Contracts.video_metadata_read_repository import VideoMetadataReadRepository
 
 class VideoMetadataAggregate:
-    """
-    The aggregate root for managing video metadata, enforcing business rules,
-    and interacting with repositories for persistence.
-    """
-
-    def __init__(self, repository: VideoMetadataReadRepository):
-        self._repository = repository
-
     def create_video_metadata(
         self,
         user_id: int,

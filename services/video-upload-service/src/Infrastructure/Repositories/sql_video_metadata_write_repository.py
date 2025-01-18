@@ -1,9 +1,10 @@
-from typing import Optional
+from typing import Optional, List
 from sqlmodel import Session, select, delete
-from Domain.Aggregates.video_metadata_aggregate import VideoMetadataAggregate as VideoMetadataAggregate
+from Domain.Aggregates.video_metadata_aggregate import VideoMetadataAggregate
 from Infrastructure.Models.storage_bucket_model import StorageBucketModel as StorageBucket
 from Infrastructure.Models.video_metadata_model import VideoMetadataModel as VideoMetadata
 from Infrastructure.Models.video_metadata_storage_bucket_link_model import VideoMetadataStorageBucketLinkModel as VideoMetadataStorageBucketLink
+from Application.Mappers.video_metadata_mapper import VideoMetadataMapper
 
 class VideoMetadataRepository:
     """
@@ -15,10 +16,10 @@ class VideoMetadataRepository:
         Saves a VideoMetadataAggregate to the database, explicitly persisting VideoMetadataStorageBucketLink relationships.
         """
         try:
-            entity = aggregate.to_entity()
-
+            entity = VideoMetadataMapper.to_entity(aggregate)
             session.add(entity)
 
+            # Persist bucket links
             for bucket in aggregate.storage_buckets:
                 bucket_entity = session.get(StorageBucket, bucket.id)
                 if bucket_entity:
@@ -30,7 +31,7 @@ class VideoMetadataRepository:
             session.commit()
             session.refresh(entity)
 
-            return VideoMetadataAggregate.from_entity(entity)
+            return VideoMetadataMapper.from_entity(entity, aggregate.storage_buckets)
         except Exception as e:
             session.rollback()
             raise RuntimeError(f"Error saving video upload: {str(e)}")
@@ -40,26 +41,27 @@ class VideoMetadataRepository:
         Updates a VideoMetadataAggregate in the database, including VideoMetadataStorageBucketLink relationships.
         """
         try:
-            # Retrieve the existing entity
             entity = session.get(VideoMetadata, aggregate.id)
             if not entity:
                 return None
 
-            # Update entity attributes
-            aggregate.update_entity(entity)
-            # Update links
+            # Update the entity's fields
+            updated_entity = VideoMetadataMapper.to_entity(aggregate)
+            entity.title = updated_entity.title
+            entity.description = updated_entity.description
+            entity.updated_at = updated_entity.updated_at
+
+            # Update bucket links
             session.exec(
                 delete(VideoMetadataStorageBucketLink).where(VideoMetadataStorageBucketLink.video_metadata_id == entity.id)
             )
             for bucket in aggregate.storage_buckets:
                 session.add(VideoMetadataStorageBucketLink(video_metadata_id=entity.id, storage_bucket_id=bucket.id))
 
-            # Commit updates
             session.commit()
             session.refresh(entity)
 
-            # Map back to aggregate
-            return VideoMetadataAggregate.from_entity(entity)
+            return VideoMetadataMapper.from_entity(entity, aggregate.storage_buckets)
         except Exception as e:
             session.rollback()
             raise RuntimeError(f"Error updating video upload: {str(e)}")
@@ -73,12 +75,9 @@ class VideoMetadataRepository:
             if not entity:
                 return False
 
-            # Delete relationships in the association table
             session.exec(
                 delete(VideoMetadataStorageBucketLink).where(VideoMetadataStorageBucketLink.video_metadata_id == video_id)
             )
-
-            # Delete the video entity
             session.delete(entity)
             session.commit()
             return True
@@ -91,22 +90,17 @@ class VideoMetadataRepository:
         Retrieves a VideoMetadataAggregate by ID, explicitly including VideoMetadataStorageBucketLink relationships.
         """
         try:
-            # Retrieve the entity
             entity = session.get(VideoMetadata, video_id)
             if not entity:
                 return None
 
             # Retrieve linked storage buckets
-            links = session.exec(
-                select(VideoMetadataStorageBucketLink).where(VideoMetadataStorageBucketLink.video_metadata_id == video_id)
+            buckets = session.exec(
+                select(StorageBucket)
+                .join(VideoMetadataStorageBucketLink, StorageBucket.id == VideoMetadataStorageBucketLink.storage_bucket_id)
+                .where(VideoMetadataStorageBucketLink.video_metadata_id == video_id)
             ).all()
-            bucket_ids = [link.storage_bucket_id for link in links]
-            buckets = session.exec(select(StorageBucket).where(StorageBucket.id.in_(bucket_ids))).all()
 
-            # Attach buckets to the aggregate
-            aggregate = VideoMetadataAggregate.from_entity(entity)
-            aggregate.storage_buckets = buckets
-
-            return aggregate
+            return VideoMetadataMapper.from_entity(entity, buckets)
         except Exception as e:
             raise RuntimeError(f"Error retrieving video upload: {str(e)}")

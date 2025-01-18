@@ -24,6 +24,6 @@ def test_successful_video_upload():
         )
     
     # Assert the status code is 200 (OK)
-    assert response.status_code == 200
     print(response.json())
-    assert response.json() == {"message": "Video uploaded successfully. Uploaded file: test.mp4"}
+    assert response.status_code == 200
+    assert response.json() == {'message': 'Video uploaded successfully', 'video_metadata': {'uuid': '1234'}}
