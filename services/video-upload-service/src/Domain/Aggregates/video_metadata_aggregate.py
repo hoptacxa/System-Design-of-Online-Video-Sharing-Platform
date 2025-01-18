@@ -22,24 +22,6 @@ class VideoMetadataAggregate:
         user_uuid: UUID,
         # storage_buckets: List[StorageBucket],
     ):
-        print("VideoMetadataAggregate")
-    #     if not isinstance(uuid, UUID):
-    #         raise ValueError("The uuid must be a valid UUID instance.")
-    #     if not isinstance(title, Title):
-    #         raise ValueError("The title must be a valid Title instance.")
-    #     if not isinstance(description, Description):
-    #         raise ValueError("The description must be a valid Description instance.")
-    #     if not isinstance(file_key, FileKey):
-    #         raise ValueError("The file_key must be a valid FileKey instance.")
-    #     if not isinstance(duration, Duration):
-    #         raise ValueError("The duration must be a valid Duration instance.")
-    #     if not isinstance(resolution, Resolution):
-    #         raise ValueError("The resolution must be a valid Resolution instance.")
-    #     if not isinstance(storage_buckets, list) or any(
-    #         not isinstance(bucket, StorageBucket) for bucket in storage_buckets
-    #     ):
-    #         raise ValueError("Storage buckets must be a list of StorageBucket instances.")
-
         self.uuid = uuid
         self.title = title
         self.description = description

@@ -16,7 +16,7 @@ class UploadVideoCommand:
         resolution: str,
         user_uuid: str,
         file_key: str
-    ): # , thumbnail_key: str, duration: Duration, resolution: Resolution
+    ):
         self.uuid = uuid
         self.title = title
         self.description = description
@@ -24,6 +24,3 @@ class UploadVideoCommand:
         self.user_uuid = user_uuid
         self.file_key = file_key
         self.resolution = resolution
-        # self.thumbnail_key = thumbnail_key
-        # self.duration = duration
-        # self.resolution = resolution
