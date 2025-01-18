@@ -1,12 +1,12 @@
 from dataclasses import dataclass
-from Domain.ValueObjects.duration import Duration
-from Domain.ValueObjects.resolution import Resolution
+from Domain.ValueObjects import duration as Duration, resolution as Resolution, title as Title, description as Description, file_key as FileKey
 
 @dataclass
 class VideoMetadata:
     id: int
     user_id: int
-    file_key: str
-    thumbnail_key: str
+    title: Title
+    description: Description
+    file_key: FileKey
     duration: Duration
     resolution: Resolution

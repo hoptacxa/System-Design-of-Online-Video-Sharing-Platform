@@ -1,6 +1,5 @@
 from typing import Optional
 from fastapi import Depends
-from Domain.Aggregates.video_metadata_aggregate import VideoMetadataAggregate
 from Domain.Contracts.video_metadata_write_repository import VideoMetadataWriteRepository
 from Infrastructure.Repositories.inmemory_video_metadata_write_repository import get_video_metadata_write_repository
 from Domain.Entities.video_metadata import VideoMetadata
