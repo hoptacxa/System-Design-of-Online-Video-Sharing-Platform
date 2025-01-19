@@ -1,8 +1,11 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from Presentation.Requests.get_request import GetRequest
+
+# Initialize the router
 router = APIRouter()
 
-@router.get("/command/", response_model=dict)
-async def command():
+@router.get("/command/get", response_model=dict)
+async def command(request: GetRequest = Depends()):
     try:
         return {}
     except ValueError as e:
