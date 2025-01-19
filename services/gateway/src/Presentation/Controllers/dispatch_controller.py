@@ -34,6 +34,7 @@ async def command(
         else:
             raise HTTPException(status_code=400, detail="Download failed")
     except ValueError as e:
+        print(e)
         raise HTTPException(status_code=400, detail=str(e))  # Handle invalid input
     except Exception as e:
         print(e)
