@@ -16,9 +16,24 @@ class S3FileUploadService(FileUploadService):
                 break
         if not bucket_exists:
             s3.create_bucket(Bucket=bucket_name)
+        s3.put_bucket_policy(
+            Bucket=bucket_name,
+            Policy='''{
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Principal": "*",
+                        "Action": "s3:GetObject",
+                        "Resource": "arn:aws:s3:::video-upload-service/*"
+                    }
+                ]
+            }'''
+        )
         s3.put_object(
             Body=file_contents,
-            Bucket="video-upload-service",
-            Key=file_key
+            Bucket=bucket_name,
+            Key=file_key,
+            ACL="public-read"
         )
-        return file_key
+        return f"{s3_endpoint}/{bucket_name}/{file_key}"
