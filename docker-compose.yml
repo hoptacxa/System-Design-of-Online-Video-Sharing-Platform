@@ -10,6 +10,7 @@ services:
     ports:
       - "9000:9000"
       - "9001:9001"
+    restart: always
     environment:
       MINIO_ACCESS_KEY: hao
       MINIO_SECRET_KEY: nghiemxuan
