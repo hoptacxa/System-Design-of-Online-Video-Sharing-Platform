@@ -1,13 +1,27 @@
 from fastapi import APIRouter, HTTPException, Depends
+from Application.Commands.download_command import DownloadCommand
+from Application.CommandHandlers.download_command_handler import DownloadCommandHandler as CommandHandler
 from Presentation.Requests.get_request import GetRequest
 
 # Initialize the router
 router = APIRouter()
 
-@router.get("/command/get", response_model=dict)
-async def command(request: GetRequest = Depends()):
+@router.get("/command/get", response_model=bytes)
+async def command(
+    request: GetRequest = Depends(),
+    command_handler: CommandHandler = Depends()
+):
     try:
-        return {}
+        command = DownloadCommand(
+            cid=request.cid
+        )
+        
+        download_bytes = command_handler.handle(command)
+        
+        if download_bytes:
+            return download_bytes
+        else:
+            raise HTTPException(status_code=400, detail="Download failed")
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))  # Handle invalid input
     except Exception as e:

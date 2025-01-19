@@ -9,6 +9,6 @@ def test_dispatch_from_gateway():
     
     print(response.json())
     assert response.status_code == 200
-    assert response.json() == {}
+    assert response.content == b'"Hello, World!"'
 
     print("Test dispatch from gateway")
