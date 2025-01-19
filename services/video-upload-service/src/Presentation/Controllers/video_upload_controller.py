@@ -58,4 +58,8 @@ async def upload_video(
         raise HTTPException(status_code=400, detail=str(e))  # Handle invalid input
     except Exception as e:
         print(e)
+        trace = e.__traceback__
+        while trace.tb_next:
+            trace = trace.tb_next
+            print(f"Caused by: {trace.tb_frame.f_code.co_name} in {trace.tb_frame.f_code.co_filename}:{trace.tb_lineno}")
         raise HTTPException(status_code=500, detail="Internal Server Error")

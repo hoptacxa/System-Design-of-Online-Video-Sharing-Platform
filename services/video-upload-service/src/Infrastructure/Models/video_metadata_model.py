@@ -17,6 +17,7 @@ class VideoMetadataModel(SQLModel, table=True):
     file_key: str
     duration: int
     resolution: str
+    public_url: str
 
     # Relationship to link storage buckets
     # storage_bucket_links: List[VideoMetadataStorageBucketLinkModel] = Relationship(back_populates="video_metadata")

@@ -27,6 +27,7 @@ class SqlVideoMetadataWriteRepository(VideoMetadataWriteRepository):
                 description=entity.description,
                 file_key=entity.file_key,
                 duration=entity.duration,
+                public_url=entity.public_url,
                 resolution=entity.resolution
             )
             session.add(instance=new_video_metadata)
@@ -46,6 +47,7 @@ class SqlVideoMetadataWriteRepository(VideoMetadataWriteRepository):
             return SqlVideoMetadataWriteRepository.to_aggregate(new_video_metadata)
         except Exception as e:
             session.rollback()
+            print(e.__traceback__.tb_lineno)
             raise RuntimeError(f"Error saving video upload: {str(e)}")
 
     def to_aggregate(model: VideoMetadataModel) -> VideoMetadataAggregate:
@@ -60,6 +62,7 @@ class SqlVideoMetadataWriteRepository(VideoMetadataWriteRepository):
             title=model.title,
             description=model.description,
             duration=model.duration,
+            public_url=model.public_url,
             resolution=model.resolution
         )
 

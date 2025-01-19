@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Domain.ValueObjects import duration as Duration, resolution as Resolution, title as Title, description as Description, file_key as FileKey
+from Domain.ValueObjects import duration as Duration, resolution as Resolution, title as Title, description as Description, file_key as FileKey, public_url as PublicUrl
 from uuid import UUID
 
 @dataclass
@@ -11,3 +11,4 @@ class VideoMetadata:
     file_key: FileKey
     duration: Duration
     resolution: Resolution
+    public_url: PublicUrl

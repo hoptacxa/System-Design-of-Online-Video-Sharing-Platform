@@ -21,6 +21,7 @@ class VideoMetadataMapper:
             file_key=aggregate.file_key,
             duration=aggregate.duration,
             resolution=aggregate.resolution,
+            public_url=aggregate.public_url
         )
         return entity
 
@@ -35,6 +36,7 @@ class VideoMetadataMapper:
             file_key=entity.file_key,
             duration=entity.duration,
             resolution=entity.resolution,
+            public_url=entity.public_url,
             description=entity.description,
         )
 

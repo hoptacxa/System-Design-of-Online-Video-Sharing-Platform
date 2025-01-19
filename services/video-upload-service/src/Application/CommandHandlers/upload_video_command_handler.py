@@ -24,8 +24,7 @@ class UploadVideoCommandHandler:
     def handle(self, command: UploadVideoCommand):
         # Delegate the creation of video metadata to the aggregate.
         video_file = command.video_file
-        video_file_length = len(video_file.read())
-        self.file_upload_service.upload_file(
+        public_url = self.file_upload_service.upload_file(
             file_contents=video_file,
             file_key=command.file_key
         )
@@ -37,6 +36,7 @@ class UploadVideoCommandHandler:
             file_key=command.file_key,
             duration=command.duration,
             resolution=command.resolution,
+            public_url=public_url
         )
         # Open a database session
         with Session(self.database_engine.engine) as session:
@@ -48,5 +48,6 @@ class UploadVideoCommandHandler:
             
         print("Saving video metadata")
         return {
-            "uuid": "1234",
+            "uuid": new_video_metadata.uuid,
+            "public_url": new_video_metadata.public_url
         }

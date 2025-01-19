@@ -20,6 +20,7 @@ class VideoMetadataAggregate:
         duration: Duration,
         resolution: Resolution,
         user_uuid: UUID,
+        public_url: str,
         # storage_buckets: List[StorageBucket],
     ):
         self.uuid = uuid
@@ -29,6 +30,7 @@ class VideoMetadataAggregate:
         self.duration = duration
         self.resolution = resolution
         self.user_uuid = user_uuid
+        self.public_url = public_url
         # self._storage_buckets = storage_buckets
 
     # @property

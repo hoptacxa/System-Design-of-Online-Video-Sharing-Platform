@@ -26,7 +26,7 @@ def test_successful_video_upload():
                 "description": "test",
                 "duration": 1,
                 "resolution": "1080p",
-                "file_key": "test"
+                "file_key": "test.txt"
             },
             files={"video_file": ("test.mp4", file)},
         )
@@ -34,4 +34,6 @@ def test_successful_video_upload():
     # Assert the status code is 200 (OK)
     print(response.json())
     assert response.status_code == 200
-    assert response.json() == {'message': 'Video uploaded successfully', 'video_metadata': {'uuid': '1234'}}
+    assert response.json()["message"] == "Video uploaded successfully"
+    assert response.json()["video_metadata"]["public_url"] == "http://localhost:9000/video-upload-service/test.txt"
+    
