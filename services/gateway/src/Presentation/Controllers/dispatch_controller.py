@@ -37,6 +37,7 @@ async def command(
         print(e)
         raise HTTPException(status_code=400, detail=str(e))  # Handle invalid input
     except Exception as e:
+        print(f"An error occurred: {e}")
         print(e)
         trace = e.__traceback__
         while trace.tb_next:

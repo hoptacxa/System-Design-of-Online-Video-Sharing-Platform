@@ -10,9 +10,9 @@ class BroadcastCommandHandler:
     ):
         self.node_read_repository = node_read_repository
 
-    def handle(self, command: BroadcastCommand) -> bytes:
+    def handle(self, command: BroadcastCommand) -> dict:
         node = self.node_read_repository.get_node_by_cid(Cid(command.cid))
-        if not node:
-            raise Exception(f"Node with CID {command.cid} not found")
         print(f"The node is broadcasting request for CID {command.cid}...")
+        
+        return node
 

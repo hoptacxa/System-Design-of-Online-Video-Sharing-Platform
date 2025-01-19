@@ -20,6 +20,7 @@ class DownloadCommandHandler:
             broadcast_command = BroadcastCommand(
                 cid=command.cid
             )
-            return self.broadcast_command_handler.handle(broadcast_command)
+            node = self.broadcast_command_handler.handle(broadcast_command)
+            print(f"Node {node['uuid']} has data for CID {command.cid}")
 
         return file_contents
