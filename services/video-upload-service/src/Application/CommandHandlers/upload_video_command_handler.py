@@ -7,18 +7,28 @@ from Application.Commands.upload_video_command import UploadVideoCommand
 from typing import Annotated
 from sqlmodel import Session, create_engine
 from Infrastructure.Repositories.database_engine import DatabaseEngine
+from Infrastructure.Services.s3_file_upload_service import S3FileUploadService
+from Application.Contracts.file_upload_service import FileUploadService
 
 class UploadVideoCommandHandler:
     def __init__(
         self,
         write_repository: VideoMetadataWriteRepository = Depends(SqlVideoMetadataWriteRepository),
+        file_upload_service: FileUploadService = Depends(S3FileUploadService),
         database_engine: DatabaseEngine = Depends()
     ):
         self._write_repository = write_repository
         self.database_engine = database_engine
+        self.file_upload_service = file_upload_service
 
     def handle(self, command: UploadVideoCommand):
         # Delegate the creation of video metadata to the aggregate.
+        video_file = command.video_file
+        video_file_length = len(video_file.read())
+        self.file_upload_service.upload_file(
+            file_contents=video_file,
+            file_key=command.file_key
+        )
         new_video_metadata = VideoMetadataAggregate(
             uuid=command.uuid,
             user_uuid=command.user_uuid,

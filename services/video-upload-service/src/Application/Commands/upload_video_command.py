@@ -15,6 +15,7 @@ class UploadVideoCommand:
         duration: int,
         resolution: str,
         user_uuid: str,
+        video_file: bytes,
         file_key: str
     ):
         self.uuid = uuid
@@ -24,3 +25,4 @@ class UploadVideoCommand:
         self.user_uuid = user_uuid
         self.file_key = file_key
         self.resolution = resolution
+        self.video_file = video_file

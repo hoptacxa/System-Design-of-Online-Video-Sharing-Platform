@@ -43,6 +43,7 @@ async def upload_video(
             duration=request.duration,
             user_uuid=uuid4(),
             file_key=request.file_key,
+            video_file=request.video_file.file
         )
         
         # Handle the command through the handler
