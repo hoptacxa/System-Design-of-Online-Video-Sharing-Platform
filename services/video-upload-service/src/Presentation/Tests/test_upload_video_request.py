@@ -31,6 +31,8 @@ def test_successful_video_upload():
             files={"video_file": ("test.mp4", file)},
         )
     
+    # delete the file
+    filename.unlink()
     # Assert the status code is 200 (OK)
     print(response.json())
     assert response.status_code == 200
