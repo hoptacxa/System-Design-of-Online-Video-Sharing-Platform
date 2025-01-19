@@ -5,10 +5,7 @@ from Presentation.Routes.main import app
 client = TestClient(app)
 
 def test_dispatch_from_gateway():
-    response = client.post(
-        "/dispatch/",
-        data={}
-    )
+    response = client.get("/command/")
     assert response.status_code == 200
     assert response.json() == {}
 
