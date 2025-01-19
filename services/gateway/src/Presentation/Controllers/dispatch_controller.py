@@ -1,3 +1,5 @@
+from fastapi.responses import StreamingResponse
+from io import BytesIO
 from fastapi import APIRouter, HTTPException, Depends
 from Application.Commands.download_command import DownloadCommand
 from Application.CommandHandlers.download_command_handler import DownloadCommandHandler as CommandHandler
@@ -6,7 +8,7 @@ from Presentation.Requests.get_request import GetRequest
 # Initialize the router
 router = APIRouter()
 
-@router.get("/command/get", response_model=bytes)
+@router.get("/command/get")
 async def command(
     request: GetRequest = Depends(),
     command_handler: CommandHandler = Depends()
@@ -19,7 +21,16 @@ async def command(
         download_bytes = command_handler.handle(command)
         
         if download_bytes:
-            return download_bytes
+            file_stream = BytesIO(download_bytes)
+            
+            return StreamingResponse(
+                file_stream,
+                media_type="application/octet-stream",
+                headers={
+                    "Content-Disposition": f"attachment; filename={request.cid}"
+                }
+            )
+
         else:
             raise HTTPException(status_code=400, detail="Download failed")
     except ValueError as e:

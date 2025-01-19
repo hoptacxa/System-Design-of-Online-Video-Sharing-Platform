@@ -5,10 +5,11 @@ from Presentation.Routes.main import app
 client = TestClient(app)
 
 def test_dispatch_from_gateway():
-    response = client.get("/command/get?cid=cid1")
+    response = client.get("/command/get?cid=test.txt")
     
-    print(response.json())
     assert response.status_code == 200
-    assert response.content == b'"Hello, World!"'
+    assert "Content-Disposition" in response.headers, "Missing 'Content-Disposition' header"
+    assert "attachment" in response.headers["Content-Disposition"], "Response is not a file download"
+    assert "test.txt" in response.headers["Content-Disposition"], "Downloaded file name mismatch"
 
     print("Test dispatch from gateway")
