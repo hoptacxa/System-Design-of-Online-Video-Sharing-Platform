@@ -13,3 +13,13 @@ def test_dispatch_from_gateway():
     assert "test.txt" in response.headers["Content-Disposition"], "Downloaded file name mismatch"
 
     print("Test dispatch from gateway")
+
+def test_dispatch_from_gateway_and_broadcast():
+    response = client.get("/command/get?cid=test2.txt")
+    
+    assert response.status_code == 200
+    assert "Content-Disposition" in response.headers, "Missing 'Content-Disposition' header"
+    assert "attachment" in response.headers["Content-Disposition"], "Response is not a file download"
+    assert "test.txt" in response.headers["Content-Disposition"], "Downloaded file name mismatch"
+
+    print("Test dispatch from gateway")

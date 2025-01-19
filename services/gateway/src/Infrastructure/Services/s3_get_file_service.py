@@ -3,7 +3,6 @@ from botocore.exceptions import ClientError
 
 class S3GetFileService:
     def get_file_contents(self, file_key: str) -> bytes:
-        print(f"Getting file from S3 with key: {file_key}")
         s3_endpoint = "http://localhost:9000"
         access_key="hao"
         secret_key="nghiemxuan"
@@ -15,7 +14,6 @@ class S3GetFileService:
             return response["Body"].read()
         except ClientError as e:
             if e.response["Error"]["Code"] == "NoSuchKey":
-                print('e.response["Error"]["Code"]')
                 return None
             else:
                 print(f"Error getting file from S3: {e.__class__.__name__}")
