@@ -15,7 +15,8 @@ def test_dispatch_from_gateway():
     print("Test dispatch from gateway")
 
 def test_dispatch_from_gateway_and_broadcast():
-    response = client.get("/command/get?cid=test2.txt")
+    cid = f"Qm{'1' * 44}"
+    response = client.get(f"/command/get?cid={cid}")
     
     assert response.status_code == 200
     assert "Content-Disposition" in response.headers, "Missing 'Content-Disposition' header"
