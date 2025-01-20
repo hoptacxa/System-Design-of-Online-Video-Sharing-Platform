@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class RegisterCommandHandler {
-    getHello(): string {
+    handle(registerCommand): string {
         return 'Hello World!';
     }
 }

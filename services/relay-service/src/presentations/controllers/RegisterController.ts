@@ -7,6 +7,6 @@ export class RegisterController {
 
   @Get()
   getHello(): string {
-    return this.registerCommandHandler.getHello();
+    return ''
   }
 }
