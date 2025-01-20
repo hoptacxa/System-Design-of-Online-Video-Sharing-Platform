@@ -1,12 +1,12 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { RequestCommand } from '../commands/requestCommand';
-import { RequestAggregate } from 'src/domain/aggregates/requestAggregate';
-import { InMemoryRequestWriteRepository } from '../infrastructure/repositories/inMemoryRequestWriteRepository';
-import { InMemoryPeerReadRepository } from 'src/infrastructure/repositories/inMemoryPeerReadRepository';
-import { RequestUuid } from 'src/domain/valueobjects/requestUuid';
-import { NodeId } from 'src/domain/valueobjects/nodeId';
-import { RequestPayload } from 'src/domain/valueobjects/requestPayload';
-import { WebsocketGateway } from 'src/presentations/gateways/websocket.gateway';
+import { RequestAggregate } from '../../domain/aggregates/requestAggregate';
+import { InMemoryRequestWriteRepository } from '../../infrastructure/repositories/inMemoryRequestWriteRepository';
+import { InMemoryPeerReadRepository } from '../../infrastructure/repositories/inMemoryPeerReadRepository';
+import { RequestUuid } from '../../domain/valueobjects/requestUuid';
+import { NodeId } from '../../domain/valueobjects/nodeId';
+import { RequestPayload } from '../../domain/valueobjects/requestPayload';
+import { WebsocketGateway } from '../../presentations/gateways/websocket.gateway';
 
 @CommandHandler(RequestCommand)
 export class RequestCommandHandler implements ICommandHandler<RequestCommand> {

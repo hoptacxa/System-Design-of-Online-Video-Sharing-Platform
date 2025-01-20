@@ -62,9 +62,10 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     }
 
     @SubscribeMessage('response')
-    async handleResponse(@MessageBody() data: { peerId: string; to: string; payload: any }, @ConnectedSocket() client: Socket) {
+    async handleResponse(@MessageBody() data: { Body: any, uuid: string }, @ConnectedSocket() client: Socket) {
         try {
-            const result = await this.commandBus.execute(new ResponseCommand(data.peerId, data.to, data.payload));
+            console.log(data)
+            const result = await this.commandBus.execute(new ResponseCommand(data.uuid, data.Body));
             client.emit('success', result);
         } catch (error) {
             client.emit('response-error', { message: error.message });

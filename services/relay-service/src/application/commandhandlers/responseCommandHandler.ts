@@ -1,26 +1,48 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { ResponseCommand } from '../commands/responseCommand';
+import { WebsocketGateway } from 'src/presentations/gateways/websocket.gateway';
+import { InMemoryRequestReadRepository } from '../../infrastructure/repositories/inMemoryRequestReadRepository';
+import { InMemoryRequestWriteRepository } from '../../infrastructure/repositories/inMemoryRequestWriteRepository';
 
 @CommandHandler(ResponseCommand)
 export class ResponseCommandHandler implements ICommandHandler<ResponseCommand> {
+    constructor (
+        private readonly websocketGateway: WebsocketGateway,
+        private readonly inMemoryRequestWriteRepository: InMemoryRequestWriteRepository,
+        private readonly inMemoryRequestReadRepository: InMemoryRequestReadRepository,
+    ){ }
     async execute(command: ResponseCommand): Promise<any> {
-        const { peerId, to, payload } = command;
+        const { 
+            Body,
+            requestUuid,
+         } = command;
 
         // Logic to validate and forward the response
-        if (!this.isPeerAvailable(to)) {
+        if (!this.isPeerAvailable()) {
             throw new Error('Requester peer not found');
         }
 
-        this.forwardResponse(to, { from: peerId, payload });
+        this.forwardResponse(requestUuid, Body);
         return { message: 'Response forwarded successfully' };
     }
 
-    private isPeerAvailable(peerId: string): boolean {
+    private isPeerAvailable(): boolean {
         // Add your validation logic
         return true; // Placeholder
     }
 
-    private forwardResponse(peerId: string, data: any): void {
+    private forwardResponse(requestUuid, Body) {
         // Add your logic to forward the response
+        let request = this.inMemoryRequestReadRepository.getByUuid(requestUuid)
+        console.log({
+            request
+        })
+        let requesterId = request.requesterId
+        let client = this.websocketGateway.getClient(requesterId)
+        if (client) {
+            client.emit("response", {Body, requesterId, requestUuid});
+        } else {
+            throw new Error(`Client with nodeId ${requesterId} not found`);
+        }
     }
 }

@@ -1,7 +1,6 @@
 export class ResponseCommand {
     constructor(
-        public readonly peerId: string,
-        public readonly to: string,
-        public readonly payload: any,
+        public readonly requestUuid: string,
+        public readonly Body: any,
     ) { }
 }

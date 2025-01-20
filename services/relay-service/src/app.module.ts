@@ -11,8 +11,10 @@ import { ResponseCommandHandler } from './application/commandhandlers/responseCo
 import { InMemoryPeerWriteRepository } from './infrastructure/repositories/inMemoryPeerWriteRepository'
 import { InMemoryPeerReadRepository } from './infrastructure/repositories/inMemoryPeerReadRepository';
 import { InMemoryUserReadRepository } from './infrastructure/repositories/inMemoryUserReadRepository';
-import { InMemoryRequestWriteRepository } from './application/infrastructure/repositories/inMemoryRequestWriteRepository';
+import { InMemoryRequestWriteRepository } from './infrastructure/repositories/inMemoryRequestWriteRepository';
+import { InMemoryRequestReadRepository } from './infrastructure/repositories/inMemoryRequestReadRepository';
 const sharedPeers = new Map();
+const sharedRequests = new Map();
 const sharedUsers = [
   {
     userId: 'uid',
@@ -31,8 +33,15 @@ const sharedUsers = [
   controllers: [],
   exports: [WebsocketGateway],
   providers: [WebsocketGateway, RegisterCommandHandler, RequestCommandHandler, ResponseCommandHandler,
-    InMemoryRequestWriteRepository,
     // Repositories
+    {
+      provide: InMemoryRequestWriteRepository,
+      useFactory: () => new InMemoryRequestWriteRepository(sharedRequests)
+    },
+    {
+      provide: InMemoryRequestReadRepository,
+      useFactory: () => new InMemoryRequestReadRepository(sharedRequests)
+    },
     {
       provide: InMemoryPeerReadRepository,
       useFactory: () => new InMemoryPeerReadRepository(sharedPeers),

@@ -94,12 +94,11 @@ describe('WebsocketGateway (Integration)', () => {
       // Responder sends a response back
       let {uuid} = data;
       wsClientResponder.emit('response', { uuid, Body: 'Response received' });
-      done();
     });
 
     // Simulate the requester handling the response from the responder
     wsClientRequester.on('response', (response) => {
-      expect(response).toEqual(expect.objectContaining({ message: 'Response received' }));
+      expect(response).toEqual(expect.objectContaining({ Body: 'Response received' }));
       done(); // Test completed successfully
     });
 

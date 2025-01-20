@@ -1,14 +1,13 @@
 
 import { Injectable } from '@nestjs/common';
-import { RequestAggregate } from '../../../domain/aggregates/requestAggregate';
-import { RequestUuid as Uuid } from '../../../domain/valueobjects/requestUuid'
+import { RequestAggregate } from '../../domain/aggregates/requestAggregate';
+import { RequestUuid as Uuid } from '../../domain/valueobjects/requestUuid'
 
 @Injectable()
 export class InMemoryRequestWriteRepository {
-    private readonly requests: Map<string, any>;
+    // private readonly requests: Map<string, any>;
 
-    constructor() {
-        this.requests = new Map<string, any>();
+    constructor(private readonly requests: Map<string, any>) {
     }
 
     // Save a new request to the repository
