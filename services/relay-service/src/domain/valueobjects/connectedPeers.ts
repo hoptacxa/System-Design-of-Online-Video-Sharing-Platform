@@ -1,5 +1,6 @@
 export class ConnectedPeers {
-    constructor(public peers: Set<any>) {
+    public peers: Set<any>
+    constructor(peers: Array<any>) {
         if (!Array.isArray(peers)) {
             throw new Error('ConnectedPeers must be initialized with an array');
         }

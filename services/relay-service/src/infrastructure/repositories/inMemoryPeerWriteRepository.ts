@@ -24,7 +24,7 @@ export class InMemoryPeerWriteRepository {
         this.peers.set(nodeId.value, {
             peerAddress,
             storageCapacity,
-            connectedPeers: new ConnectedPeers(new Set),
+            connectedPeers: new ConnectedPeers([]),
         });
     }
 

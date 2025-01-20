@@ -10,7 +10,20 @@ import { RequestCommandHandler } from './application/commandhandlers/requestComm
 import { ResponseCommandHandler } from './application/commandhandlers/responseCommandHandler'
 import { InMemoryPeerWriteRepository } from './infrastructure/repositories/inMemoryPeerWriteRepository'
 import { InMemoryPeerReadRepository } from './infrastructure/repositories/inMemoryPeerReadRepository';
+import { InMemoryUserReadRepository } from './infrastructure/repositories/inMemoryUserReadRepository';
 const sharedPeers = new Map();
+const sharedUsers = [
+  {
+    userId: 'uid',
+    accessKeys: [
+      {
+        accessKeyId: 'user1',
+        accessSecretKey: 'secret1'
+      }
+    ],
+    peers: [],
+  }
+];
 
 @Module({
   imports: [CqrsModule.forRoot()],
@@ -25,6 +38,10 @@ const sharedPeers = new Map();
     {
       provide: InMemoryPeerWriteRepository,
       useFactory: () => new InMemoryPeerWriteRepository(sharedPeers),
+    },
+    {
+      provide: InMemoryUserReadRepository,
+      useFactory: () => new InMemoryUserReadRepository(sharedUsers),
     },
 
   ]

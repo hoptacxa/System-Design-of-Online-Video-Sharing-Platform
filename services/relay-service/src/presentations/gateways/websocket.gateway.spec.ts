@@ -19,7 +19,13 @@ describe('WebsocketGateway (Integration)', () => {
   });
 
   it('should handle the "register" event successfully', (done) => {
-    wsClient.emit('register', { peerId: 'peer1', accessKeyId: 'user1', accessSecretKey: 'secret1' });
+    wsClient.emit('register', { 
+      peerId: 'peer1', 
+      peerAddress: '/ip4/198.51.100.0/tcp/4242/p2p/QmRelay/p2p-circuit/p2p/QmRelayedPeer',
+      storageCapacity: 10,
+      accessKeyId: 'user1', 
+      accessSecretKey: 'secret1' 
+    });
 
     wsClient.on('success', (response) => {
       expect(response).toEqual(expect.objectContaining({ message: 'Peer registered successfully' }));
