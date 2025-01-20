@@ -26,7 +26,7 @@ export class InMemoryPeerWriteRepository {
             storageCapacity,
             connectedPeers: new ConnectedPeers([]),
         });
-        console.log(this.peers)
+        // console.log(this.peers)
     }
 
     /**

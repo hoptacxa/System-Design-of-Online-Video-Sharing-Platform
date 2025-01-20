@@ -30,7 +30,7 @@ export class InMemoryRequestWriteRepository {
             status: status
         })
 
-        console.log(this.requests)
+        // console.log(this.requests)
     }
 
     // Find a request by UUID

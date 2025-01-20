@@ -1,11 +1,13 @@
+import { NodeId } from "src/domain/valueobjects/nodeId";
+
 export class InMemoryPeerReadRepository {
     public peers: Map<string, any>;
     constructor(sharedPeers) {
         this.peers = sharedPeers; // Shared datastore
     }
 
-    async findById(nodeId) {
-        return null;
+    async findById(nodeId: NodeId) {
+        return this.peers.get(nodeId.value);
     }
 
     async findByUserId(userId): Promise<Array<any>> {
