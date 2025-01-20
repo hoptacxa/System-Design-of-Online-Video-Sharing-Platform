@@ -4,10 +4,10 @@ import { Module } from '@nestjs/common';
 // import { AppService } from './app.service';
 // import { RegisterCommandHandler } from './application/commandhandlers/registerCommandHandler';
 import { WebsocketGateway } from './presentations/gateways/websocket.gateway'
-import { WebSocketGateway } from '@nestjs/websockets';
+import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
-  imports: [],
+  imports: [CqrsModule.forRoot()],
   controllers: [],
   exports: [WebsocketGateway],
   providers: [WebsocketGateway],

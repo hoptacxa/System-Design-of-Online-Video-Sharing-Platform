@@ -952,6 +952,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nestjs/cqrs@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "@nestjs/cqrs@npm:11.0.0"
+  peerDependencies:
+    "@nestjs/common": ^10.0.0 || ^11.0.0
+    "@nestjs/core": ^10.0.0 || ^11.0.0
+    reflect-metadata: ^0.1.13 || ^0.2.0
+    rxjs: ^7.2.0
+  checksum: 6566d3757cf30aa2e317e90caa0fa66972f728d851aad24b78dd5931fc36e82efd2152441ee7a07cbf9b26c2b14b91000c57f75081ea7706dbf55733f532e074
+  languageName: node
+  linkType: hard
+
 "@nestjs/platform-express@npm:^10.0.0":
   version: 10.4.15
   resolution: "@nestjs/platform-express@npm:10.4.15"
@@ -5803,6 +5815,7 @@ __metadata:
     "@nestjs/cli": ^10.0.0
     "@nestjs/common": ^10.0.0
     "@nestjs/core": ^10.0.0
+    "@nestjs/cqrs": ^11.0.0
     "@nestjs/platform-express": ^10.0.0
     "@nestjs/platform-socket.io": ^11.0.1
     "@nestjs/schematics": ^10.0.0
