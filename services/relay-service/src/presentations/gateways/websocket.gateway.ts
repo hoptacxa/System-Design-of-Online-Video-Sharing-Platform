@@ -5,6 +5,7 @@ import { CommandBus } from '@nestjs/cqrs';
 import { RegisterCommand } from '../../application/commands/registerCommand'
 import { RequestCommand } from '../../application/commands/requestCommand';
 import { ResponseCommand } from '../../application/commands/responseCommand';
+import { v4 as uuidv4 } from 'uuid';
 
 @WebSocketGateway({
     cors: {
@@ -40,8 +41,9 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     @SubscribeMessage('request')
     async handleRequest(@MessageBody() data: { peerId: string; to: string; payload: any }, @ConnectedSocket() client: Socket) {
         try {
-            const result = await this.commandBus.execute(new RequestCommand(data.peerId, data.to, data.payload));
-            client.emit('success', result);
+            let uuid: string = uuidv4();
+            const result = await this.commandBus.execute(new RequestCommand(uuid, data.peerId, data.to, data.payload));
+            client.emit('request-success', result);
         } catch (error) {
             client.emit('error', { message: error.message });
         }
