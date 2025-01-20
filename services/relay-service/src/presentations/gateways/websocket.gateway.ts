@@ -28,9 +28,9 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     }
 
     @SubscribeMessage('register')
-    async handleRegister(@MessageBody() data: { peerId: string; accessKeyId: string; accessSecretKey: string }, @ConnectedSocket() client: Socket) {
+    async handleRegister(@MessageBody() data: { peerId: string; accessKeyId: string; accessSecretKey: string, storageCapacity: string, peerAddress: string }, @ConnectedSocket() client: Socket) {
         try {
-            const result = await this.commandBus.execute(new RegisterCommand(data.peerId, data.accessKeyId, data.accessSecretKey));
+            const result = await this.commandBus.execute(new RegisterCommand(data.peerId, data.accessKeyId, data.accessSecretKey, data.storageCapacity, data.peerAddress));
             client.emit('success', result);
         } catch (error) {
             client.emit('error', { message: error.message });

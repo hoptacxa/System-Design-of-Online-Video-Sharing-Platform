@@ -4,6 +4,14 @@ export class InMemoryPeerReadRepository {
         this.peers = sharedPeers; // Shared datastore
     }
 
+    async findById(nodeId) {
+        return null;
+    }
+
+    async findByUserId(userId): Promise<Array<any>> {
+        return [];
+    }
+
     /**
      * Retrieves a peer by its nodeId.
      * @param {string} nodeId - The unique identifier of the peer.

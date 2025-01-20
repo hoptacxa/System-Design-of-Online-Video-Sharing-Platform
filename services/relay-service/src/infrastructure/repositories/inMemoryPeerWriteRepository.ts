@@ -1,45 +1,72 @@
+import { NodeId } from '../../domain/valueobjects/nodeId';
+import { PeerAddress } from '../../domain/valueobjects/peerAddress';
+import { StorageCapacity } from '../../domain/valueobjects/storageCapacity';
+import { ConnectedPeers } from '../../domain/valueobjects/connectedPeers';
+
 export class InMemoryPeerWriteRepository {
-    public peers: Map<string, any>;
-    constructor(sharedPeers: Map<string, any>) {
+    public peers: Map<string, { peerAddress: PeerAddress; storageCapacity: StorageCapacity; connectedPeers: ConnectedPeers }>;
+
+    constructor(sharedPeers: Map<string, { peerAddress: PeerAddress; storageCapacity: StorageCapacity; connectedPeers: ConnectedPeers }>) {
         this.peers = sharedPeers; // Shared datastore
     }
 
     /**
      * Adds a new peer to the repository.
-     * @param {string} nodeId - The unique identifier of the peer.
-     * @param {object} peerData - The peer data (e.g., address, storageCapacity).
+     * @param {NodeId} nodeId - The unique identifier of the peer.
+     * @param {PeerAddress} peerAddress - The address of the peer.
+     * @param {StorageCapacity} storageCapacity - The storage capacity of the peer.
      * @throws {Error} If the peer already exists.
      */
-    async addPeer(nodeId, peerData) {
-        if (this.peers.has(nodeId)) {
-            throw new Error(`Peer with nodeId ${nodeId} already exists`);
+    async addPeer(nodeId: NodeId, peerAddress, storageCapacity: StorageCapacity) {
+        if (this.peers.has(nodeId.value)) {
+            throw new Error(`Peer with nodeId ${nodeId.value} already exists`);
         }
-        this.peers.set(nodeId, peerData);
+        this.peers.set(nodeId.value, {
+            peerAddress,
+            storageCapacity,
+            connectedPeers: new ConnectedPeers(new Set),
+        });
     }
 
     /**
-     * Updates an existing peer's data.
-     * @param {string} nodeId - The unique identifier of the peer.
-     * @param {object} updatedData - The updated peer data.
+     * Updates an existing peer's address.
+     * @param {NodeId} nodeId - The unique identifier of the peer.
+     * @param {PeerAddress} newAddress - The updated address of the peer.
      * @throws {Error} If the peer does not exist.
      */
-    async updatePeer(nodeId, updatedData) {
-        if (!this.peers.has(nodeId)) {
-            throw new Error(`Peer with nodeId ${nodeId} does not exist`);
+    async updatePeerAddress(nodeId: NodeId, newAddress: PeerAddress) {
+        const peer = this.peers.get(nodeId.value);
+        if (!peer) {
+            throw new Error(`Peer with nodeId ${nodeId.value} does not exist`);
         }
-        const existingPeer = this.peers.get(nodeId);
-        this.peers.set(nodeId, { ...existingPeer, ...updatedData });
+        peer.peerAddress = newAddress;
+        this.peers.set(nodeId.value, peer);
+    }
+
+    /**
+     * Updates the storage capacity of an existing peer.
+     * @param {NodeId} nodeId - The unique identifier of the peer.
+     * @param {StorageCapacity} newCapacity - The updated storage capacity.
+     * @throws {Error} If the peer does not exist.
+     */
+    async updateStorageCapacity(nodeId, newCapacity) {
+        const peer = this.peers.get(nodeId.value);
+        if (!peer) {
+            throw new Error(`Peer with nodeId ${nodeId.value} does not exist`);
+        }
+        peer.storageCapacity = newCapacity;
+        this.peers.set(nodeId.value, peer);
     }
 
     /**
      * Removes a peer from the repository.
-     * @param {string} nodeId - The unique identifier of the peer.
+     * @param {NodeId} nodeId - The unique identifier of the peer.
      * @throws {Error} If the peer does not exist.
      */
     async removePeer(nodeId) {
-        if (!this.peers.has(nodeId)) {
-            throw new Error(`Peer with nodeId ${nodeId} does not exist`);
+        if (!this.peers.has(nodeId.value)) {
+            throw new Error(`Peer with nodeId ${nodeId.value} does not exist`);
         }
-        this.peers.delete(nodeId);
+        this.peers.delete(nodeId.value);
     }
 }
