@@ -1,2 +1,2 @@
 boto3
-socketio
+python-socketio[client]
