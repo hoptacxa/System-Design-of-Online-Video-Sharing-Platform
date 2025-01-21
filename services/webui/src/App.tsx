@@ -13,7 +13,7 @@ function App() {
     accessKeyId: 'user1',
     accessSecretKey: 'secret1'
   }
-  let wsClientResponder = io(socketServer, {
+  let wsClientResponder: Socket = io(socketServer, {
     auth: responderRegistration
   });
   wsClientResponder.on('request', (data) => {
