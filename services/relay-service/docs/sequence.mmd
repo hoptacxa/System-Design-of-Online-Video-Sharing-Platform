@@ -1,0 +1,16 @@
+sequenceDiagram
+    participant A as Peer A (Client)
+    participant TURN as Relay Server
+    participant B as Peer B (Server)
+    
+    A->>TURN: emit(register peer)
+    TURN-->>A: listen event 'response' from relay server
+    
+    B->>TURN: emit(register peer)
+    TURN-->>B: listen event 'request' from relay server
+    
+    A->>TURN: emit(HTTP request)
+    TURN->>B: Forward HTTP Request
+    
+    B->>TURN: emit(HTTP Response)
+    TURN->>A: Forward HTTP Response
