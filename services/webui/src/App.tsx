@@ -19,9 +19,7 @@ function App() {
   wsClientResponder.on('request', (data) => {
     // Responder sends a response back
     let {uuid} = data;
-    let val = localStorage.getItem("keyname");
-    console.log(val?.length)
-    wsClientResponder.emit('response', { uuid, Body: val });
+    wsClientResponder.emit('response', { uuid, Body: 'Response received' });
   });
 
   const [count, setCount] = useState(0)
