@@ -1,9 +1,29 @@
+import { io, Socket } from 'socket.io-client';
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
+  const socketServer = 'https://http-0-0-0-0-3000.schnworks.com/'
+  const responderRegistration = {
+    peerId: 'peer2',
+    peerAddress: '/ip4/198.51.100.0/tcp/4242/p2p/QmRelay/p2p-circuit/p2p/QmRelayedPeer',
+    storageCapacity: 10,
+    accessKeyId: 'user1',
+    accessSecretKey: 'secret1'
+  }
+  let wsClientResponder = io(socketServer, {
+    auth: responderRegistration
+  });
+  wsClientResponder.on('request', (data) => {
+    // Responder sends a response back
+    let {uuid} = data;
+    let val = localStorage.getItem("keyname");
+    console.log(val?.length)
+    wsClientResponder.emit('response', { uuid, Body: val });
+  });
+
   const [count, setCount] = useState(0)
   // Kích thước chuỗi cần tạo (5MB)
   const sizeInBytes = 8 * 1024 * 1024; // 5MB
@@ -18,8 +38,6 @@ function App() {
 
   localStorage.setItem("keyname", largeString)
   // 
-  let val = localStorage.getItem("keyname");
-  console.log(val?.length)
 
   return (
     <>
