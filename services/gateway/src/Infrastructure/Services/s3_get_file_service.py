@@ -3,7 +3,7 @@ from botocore.exceptions import ClientError
 
 class S3GetFileService:
     def get_file_contents(self, file_key: str) -> bytes:
-        s3_endpoint = "http://localhost:9000"
+        s3_endpoint = "http://172.17.0.1:9000"
         access_key="hao"
         secret_key="nghiemxuan"
         s3 = client("s3", endpoint_url=s3_endpoint, aws_access_key_id=access_key, aws_secret_access_key=secret_key)
