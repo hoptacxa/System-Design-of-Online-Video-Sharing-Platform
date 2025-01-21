@@ -28,8 +28,6 @@ export class InMemoryRequestWriteRepository {
             payload: payload.getData(),
             status: status
         })
-
-        // console.log(this.requests)
     }
 
     // Find a request by UUID

@@ -6,16 +6,16 @@ import { InMemoryRequestWriteRepository } from '../../infrastructure/repositorie
 
 @CommandHandler(ResponseCommand)
 export class ResponseCommandHandler implements ICommandHandler<ResponseCommand> {
-    constructor (
+    constructor(
         private readonly websocketGateway: WebsocketGateway,
         private readonly inMemoryRequestWriteRepository: InMemoryRequestWriteRepository,
         private readonly inMemoryRequestReadRepository: InMemoryRequestReadRepository,
-    ){ }
+    ) { }
     async execute(command: ResponseCommand): Promise<any> {
-        const { 
+        const {
             Body,
             requestUuid,
-         } = command;
+        } = command;
 
         // Logic to validate and forward the response
         if (!this.isPeerAvailable()) {
@@ -34,15 +34,15 @@ export class ResponseCommandHandler implements ICommandHandler<ResponseCommand> 
     private forwardResponse(requestUuid, Body) {
         // Add your logic to forward the response
         let request = this.inMemoryRequestReadRepository.getByUuid(requestUuid)
-        console.log({
-            request
-        })
         let requesterId = request.requesterId
-        let client = this.websocketGateway.getClient(requesterId)
-        if (client) {
-            client.emit("response", {Body, requesterId, requestUuid});
-        } else {
-            throw new Error(`Client with nodeId ${requesterId} not found`);
+        let clients = this.websocketGateway.getClients(requesterId)
+        for (let i = 0; i < clients.length; i++) {
+            let client = clients[i];
+            if (client) {
+                client.emit("response", { Body, requesterId, requestUuid });
+            } else {
+                throw new Error(`Client with nodeId ${requesterId} not found`);
+            }
         }
     }
 }

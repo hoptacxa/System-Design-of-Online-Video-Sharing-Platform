@@ -60,9 +60,6 @@ describe('WebsocketGateway (Integration)', () => {
   });
 
   it('should handle the "response" event and forward to the correct peer', (done) => {
-    const wsClientRequester = io(`http://127.0.0.1:3000/`); // Simulating the requester peer
-    const wsClientResponder = io(`http://127.0.0.1:3000/`); // Simulating the responder peer
-
     // Peer registration data
     const requesterRegistration = {
       peerId: 'peer1',
@@ -78,16 +75,15 @@ describe('WebsocketGateway (Integration)', () => {
       accessKeyId: 'user1',
       accessSecretKey: 'secret1'
     }
-
-    // Register the requester peer
-    wsClientRequester.emit('register', requesterRegistration);
-
-    // Register the responder peer
-    wsClientResponder.emit('register', responderRegistration);
+    let wsClientRequester = io(`http://127.0.0.1:3000/`, {
+      auth: requesterRegistration
+    });
+    let wsClientResponder = io(`http://127.0.0.1:3000/`, {
+      auth: responderRegistration
+    });
 
     // Simulate the responder handling the forwarded request and emitting a "response" event
     wsClientResponder.on('request', (data) => {
-      console.log('w')
       expect(data).toEqual(expect.objectContaining({
         payload: { data: 'test' }
       }));
@@ -97,9 +93,13 @@ describe('WebsocketGateway (Integration)', () => {
     });
 
     // Simulate the requester handling the response from the responder
-    wsClientRequester.on('response', (response) => {
+    wsClientRequester.once('response', (response) => {
       expect(response).toEqual(expect.objectContaining({ Body: 'Response received' }));
-      done(); // Test completed successfully
+      done();
+      // wsClientRequester = io(`http://127.0.0.1:3000/`); // Simulating the requester peer
+      // wsClientRequester.on('response', (response) => {
+      // });
+      // wsClientRequester.emit('request', { peerId: 'peer1', to: 'peer2', payload: { data: 'test' } });
     });
 
     // Simulate an error scenario

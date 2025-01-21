@@ -14,35 +14,47 @@ import { v4 as uuidv4 } from 'uuid';
 })
 export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer() server: Server;
-    private clients = new Map<string, Socket>();
+    private clients = new Map<string, Array<Socket>>();
     private readonly logger = new Logger(WebsocketGateway.name);
 
     constructor(private readonly commandBus: CommandBus) {}
 
-    getClient(nodeId: string): Socket | undefined {
+    getClients(nodeId: string): Array<Socket> | undefined {
         return this.clients.get(nodeId);
     }
     afterInit(server: Server) {
         this.logger.log('WebSocket Gateway initialized');
     }
-    handleConnection(@ConnectedSocket() client: Socket) {
-        this.logger.log(`New client connected: ${client.id}`);
-    }
+    // handleConnection(@ConnectedSocket() client: Socket) {
+    //     this.logger.log(`New client connected: ${client.id}`);
+    // }
     handleDisconnect(@ConnectedSocket() client: Socket) {
-        for (const [nodeId, storedClient] of this.clients.entries()) {
-            if (storedClient.id === client.id) {
-                // this.clients.delete(nodeId);
-                this.logger.log(`Client disconnected: ${client.id} (nodeId: ${nodeId})`);
-                break;
-            }
-        }
+        // for (const [nodeId, storedClient] of this.clients.entries()) {
+        //     if (storedClient.id === client.id) {
+        //         // this.clients.delete(nodeId);
+        //         this.logger.log(`Client disconnected: ${client.id} (nodeId: ${nodeId})`);
+        //         break;
+        //     }
+        // }
     }
 
-    @SubscribeMessage('register')
-    async handleRegister(@MessageBody() data: { peerId: string; accessKeyId: string; accessSecretKey: string, storageCapacity: string, peerAddress: string }, @ConnectedSocket() client: Socket) {
+    async handleConnection(@ConnectedSocket() client: Socket) {
         try {
-            const result = await this.commandBus.execute(new RegisterCommand(data.peerId, data.accessKeyId, data.accessSecretKey, data.storageCapacity, data.peerAddress));
-            this.clients.set(data.peerId, client);
+            let {
+                peerId,
+                accessKeyId,
+                accessSecretKey,
+                storageCapacity,
+                peerAddress,
+            } = client.handshake.auth;
+            const result = await this.commandBus.execute(new RegisterCommand(peerId, accessKeyId, accessSecretKey, storageCapacity, peerAddress));
+            if (this.clients.has(peerId)) {
+                let existsClients = this.clients.get(peerId)
+                existsClients.push(client)
+                this.clients.set(peerId, existsClients)
+            }else{
+                this.clients.set(peerId, [client]);
+            }
             client.emit('success', result);
         } catch (error) {
             client.emit('register-error', { message: error.message });
