@@ -21,6 +21,7 @@ export class ResponseCommandHandler implements ICommandHandler<ResponseCommand> 
         if (!this.isPeerAvailable()) {
             throw new Error('Requester peer not found');
         }
+        console.log('respond ', Body)
 
         this.forwardResponse(requestUuid, Body);
         return { message: 'Response forwarded successfully' };

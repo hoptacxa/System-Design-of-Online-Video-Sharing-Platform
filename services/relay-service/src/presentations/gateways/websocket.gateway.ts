@@ -47,7 +47,11 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
                 storageCapacity,
                 peerAddress,
             } = client.handshake.auth;
+            if (typeof peerId !== 'string') {
+                throw new Error('PeerId must be string')
+            }
             const result = await this.commandBus.execute(new RegisterCommand(peerId, accessKeyId, accessSecretKey, storageCapacity, peerAddress));
+            console.log(client.handshake.auth, accessKeyId)
             if (this.clients.has(peerId)) {
                 let existsClients = this.clients.get(peerId)
                 existsClients.push(client)
@@ -55,8 +59,9 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
             }else{
                 this.clients.set(peerId, [client]);
             }
-            client.emit('success', result);
+            client.emit('register-success', result);
         } catch (error) {
+            this.logger.error(error.message + " in " + error.stack);
             client.emit('register-error', { message: error.message });
         }
     }
@@ -69,6 +74,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
             client.emit('request-success', result);
         } catch (error) {
             console.log(error)
+            this.logger.error(error)
             client.emit('request-error', { message: error.message });
         }
     }
@@ -76,10 +82,10 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     @SubscribeMessage('response')
     async handleResponse(@MessageBody() data: { Body: any, uuid: string }, @ConnectedSocket() client: Socket) {
         try {
-            console.log(data)
-            const result = await this.commandBus.execute(new ResponseCommand(data.uuid, data.Body));
-            client.emit('success', result);
+            await this.commandBus.execute(new ResponseCommand(data.uuid, data.Body));
         } catch (error) {
+            console.log(error)
+            this.logger.error(error)
             client.emit('response-error', { message: error.message });
         }
     }

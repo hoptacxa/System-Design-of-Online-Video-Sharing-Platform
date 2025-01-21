@@ -25,14 +25,14 @@ export class RegisterCommandHandler implements ICommandHandler<RegisterCommand> 
         }
 
         // Validate peer ownership
-        if (!user.peers.includes(peerId)) {
+        // if (!user.peers.includes(peerId)) {
             // throw new Error('Unauthorized peer');
-        }
+        // }
 
         // Check if peer is already registered
         const existingPeer = await this.peerReadRepository.findById(new NodeId(peerId));
         if (existingPeer) {
-            throw new Error(`Peer ${peerId} is already registered`);
+            // throw new Error(`Peer ${peerId} is already registered`);
         }
 
         // Register the peer

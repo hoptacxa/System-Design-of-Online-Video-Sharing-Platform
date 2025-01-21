@@ -95,11 +95,14 @@ describe('WebsocketGateway (Integration)', () => {
     // Simulate the requester handling the response from the responder
     wsClientRequester.once('response', (response) => {
       expect(response).toEqual(expect.objectContaining({ Body: 'Response received' }));
-      done();
-      // wsClientRequester = io(`http://127.0.0.1:3000/`); // Simulating the requester peer
-      // wsClientRequester.on('response', (response) => {
-      // });
-      // wsClientRequester.emit('request', { peerId: 'peer1', to: 'peer2', payload: { data: 'test' } });
+      wsClientRequester = io(`http://127.0.0.1:3000/`, {
+        auth: requesterRegistration,
+      });
+      wsClientRequester.on('response', (response) => {
+        expect(response).toEqual(expect.objectContaining({ Body: 'Response received' }));
+        done();
+      });
+      wsClientRequester.emit('request', { peerId: 'peer1', to: 'peer2', payload: { data: 'test' } });
     });
 
     // Simulate an error scenario

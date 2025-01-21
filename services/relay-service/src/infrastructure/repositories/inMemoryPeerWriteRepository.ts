@@ -19,7 +19,7 @@ export class InMemoryPeerWriteRepository {
      */
     async addPeer(nodeId: NodeId, peerAddress, storageCapacity: StorageCapacity) {
         if (this.peers.has(nodeId.value)) {
-            throw new Error(`Peer with nodeId ${nodeId.value} already exists`);
+            // throw new Error(`Peer with nodeId ${nodeId.value} already exists`);
         }
         this.peers.set(nodeId.value, {
             peerAddress,
