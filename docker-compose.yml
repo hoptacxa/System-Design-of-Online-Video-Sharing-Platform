@@ -5,6 +5,13 @@ services:
       dockerfile: dockerfiles/video-upload-service/Dockerfile
     ports:
       - "3000:80"
+  gateway-service:
+    build:
+      context: .
+      dockerfile: dockerfiles/gateway-service/Dockerfile
+    ports:
+      - "3001:80"
+    command: ["uvicorn", "src.Presentation.Routes.main:app"]
   relay-service:
     build:
       context: .
