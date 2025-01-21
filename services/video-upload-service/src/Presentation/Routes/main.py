@@ -13,5 +13,8 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan)
+@app.get("/", response_model=str)
+def hello():
+    return "Hello, World"
 app.include_router(video_upload_router)
 

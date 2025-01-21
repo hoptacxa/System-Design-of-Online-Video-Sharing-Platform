@@ -1,5 +1,7 @@
 import { io, Socket } from 'socket.io-client';
+import {v4 as uuid4} from 'uuid'
 
+const socketServer = 'http://127.0.0.1:3000/'
 describe('WebsocketGateway (Integration)', () => {
   let wsClient: Socket;
   let peerRegistration = {
@@ -11,7 +13,7 @@ describe('WebsocketGateway (Integration)', () => {
   };
 
   beforeAll(() => {
-    wsClient = io(`http://127.0.0.1:3000/`, {
+    wsClient = io(socketServer, {
       auth: peerRegistration
     });
   });
@@ -77,10 +79,10 @@ describe('WebsocketGateway (Integration)', () => {
       accessKeyId: 'user1',
       accessSecretKey: 'secret1'
     }
-    let wsClientRequester = io(`http://127.0.0.1:3000/`, {
+    let wsClientRequester = io(socketServer, {
       auth: requesterRegistration
     });
-    let wsClientResponder = io(`http://127.0.0.1:3000/`, {
+    let wsClientResponder = io(socketServer, {
       auth: responderRegistration
     });
 
@@ -98,14 +100,14 @@ describe('WebsocketGateway (Integration)', () => {
     wsClientRequester.once('response', (response) => {
       expect(response).toEqual(expect.objectContaining({ Body: 'Response received' }));
       wsClientRequester.disconnect()
-      wsClientRequester = io(`http://127.0.0.1:3000/`, {
+      wsClientRequester = io(socketServer, {
         auth: requesterRegistration,
       });
       wsClientRequester.on('response', (response) => {
         expect(response).toEqual(expect.objectContaining({ Body: 'Response received' }));
         done();
       });
-      wsClientRequester.emit('request', { peerId: 'peer1', to: 'peer2', payload: { data: 'test' } });
+      wsClientRequester.emit('request', { peerId: 'peer1', to: 'peer2', payload: { data: 'test' }, uuid: uuid4() });
     });
 
     // Simulate an error scenario
@@ -115,7 +117,7 @@ describe('WebsocketGateway (Integration)', () => {
 
     // The requester sends a request to the responder
     setTimeout(function() { 
-      wsClientRequester.emit('request', { peerId: 'peer1', to: 'peer2', payload: { data: 'test' } });
+      wsClientRequester.emit('request', { peerId: 'peer1', to: 'peer2', payload: { data: 'test' }, uuid: uuid4() });
     }, 200)
   });
 });
