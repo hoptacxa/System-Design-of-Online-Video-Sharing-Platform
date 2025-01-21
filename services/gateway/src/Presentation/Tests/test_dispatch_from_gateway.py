@@ -16,6 +16,26 @@ def test_dispatch_from_gateway():
     print("Test dispatch from gateway")
 
 def test_dispatch_from_gateway_and_broadcast():
+    responder_registration = {
+        "peerId": "peer2",
+        "peerAddress": "/ip4/198.51.100.0/tcp/4242/p2p/QmRelay/p2p-circuit/p2p/QmRelayedPeer",
+        "storageCapacity": 10,
+        "accessKeyId": "user1",
+        "accessSecretKey": "secret1",
+    }
+    sio_responder = socketio.Client()
+    @sio_responder.on('request')
+    def handle_request(data):
+        print("Responder nhận được request:", data)
+        uuid_val = data.get('uuid')
+        sio_responder.emit('response', {"uuid": uuid_val, "Body": "Response received"})
+
+    sio_responder.connect('http://127.0.0.1:3000', {}, responder_registration)
+    # 
+    test_dispatch_from_gateway_and_broadcast_with_external_running_peer()
+    sio_responder.disconnect()
+
+def test_dispatch_from_gateway_and_broadcast_with_external_running_peer():
     cid = f"Qm{'1' * 44}"
     response = client.get(f"/command/get?cid={cid}")
     
