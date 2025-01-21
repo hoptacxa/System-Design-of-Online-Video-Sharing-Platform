@@ -5,6 +5,21 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  // Kích thước chuỗi cần tạo (5MB)
+  const sizeInBytes = 8 * 1024 * 1024; // 5MB
+  const sizeInChars = sizeInBytes / 2; // Mỗi ký tự chiếm 2 byte
+
+  // Tạo chuỗi nhỏ để lặp lại
+  const smallString = "a"; // 1 ký tự
+  const repeatCount = Math.ceil(sizeInChars / smallString.length);
+
+  // Tạo chuỗi 5MB
+  const largeString = smallString.repeat(repeatCount).slice(0, sizeInChars);
+
+  localStorage.setItem("keyname", largeString)
+  // 
+  let val = localStorage.getItem("keyname");
+  console.log(val?.length)
 
   return (
     <>
