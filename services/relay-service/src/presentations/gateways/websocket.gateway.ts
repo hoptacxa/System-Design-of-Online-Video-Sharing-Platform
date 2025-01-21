@@ -48,10 +48,11 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
                 peerAddress,
             } = client.handshake.auth;
             if (typeof peerId !== 'string') {
+                this.logger.debug(client.handshake)
+                // handle reconnect
                 throw new Error('PeerId must be string')
             }
             const result = await this.commandBus.execute(new RegisterCommand(peerId, accessKeyId, accessSecretKey, storageCapacity, peerAddress));
-            console.log(client.handshake.auth, accessKeyId)
             if (this.clients.has(peerId)) {
                 let existsClients = this.clients.get(peerId)
                 existsClients.push(client)
@@ -67,10 +68,9 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     }
 
     @SubscribeMessage('request')
-    async handleRequest(@MessageBody() data: { peerId: string; to: string; payload: any }, @ConnectedSocket() client: Socket) {
+    async handleRequest(@MessageBody() data: { peerId: string; to: string; payload: any; uuid: string }, @ConnectedSocket() client: Socket) {
         try {
-            let uuid: string = uuidv4();
-            const result = await this.commandBus.execute(new RequestCommand(uuid, data.peerId, data.to, data.payload));
+            const result = await this.commandBus.execute(new RequestCommand(data.uuid, data.peerId, data.to, data.payload));
             client.emit('request-success', result);
         } catch (error) {
             console.log(error)
@@ -81,6 +81,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
 
     @SubscribeMessage('response')
     async handleResponse(@MessageBody() data: { Body: any, uuid: string }, @ConnectedSocket() client: Socket) {
+        console.log("res")
         try {
             await this.commandBus.execute(new ResponseCommand(data.uuid, data.Body));
         } catch (error) {

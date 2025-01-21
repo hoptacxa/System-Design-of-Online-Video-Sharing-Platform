@@ -55,13 +55,13 @@ export class RequestCommandHandler implements ICommandHandler<RequestCommand> {
     private forwardRequest(providerId, requesterId, uuid, payload) {
         // Add your logic to forward the request
         let clients = this.websocketGateway.getClients(providerId)
+        if (typeof clients === 'undefined') {
+            console.log("No clients available")
+            return false;
+        }
         for (let i = 0; i < clients.length; i++) {
             const client = clients[i];
-            if (client) {
-                client.emit("request", {payload, requesterId, uuid});
-            } else {
-                throw new Error(`Client with nodeId ${providerId} not found`);
-            }
+            client.emit("request", {payload, requesterId, uuid});
         }
     }
 }

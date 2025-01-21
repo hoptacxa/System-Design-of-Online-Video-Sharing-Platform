@@ -11,7 +11,9 @@ describe('WebsocketGateway (Integration)', () => {
   };
 
   beforeAll(() => {
-    wsClient = io(`http://127.0.0.1:3000/`);
+    wsClient = io(`http://127.0.0.1:3000/`, {
+      auth: peerRegistration
+    });
   });
 
   afterAll(() => {
@@ -95,6 +97,7 @@ describe('WebsocketGateway (Integration)', () => {
     // Simulate the requester handling the response from the responder
     wsClientRequester.once('response', (response) => {
       expect(response).toEqual(expect.objectContaining({ Body: 'Response received' }));
+      wsClientRequester.disconnect()
       wsClientRequester = io(`http://127.0.0.1:3000/`, {
         auth: requesterRegistration,
       });
