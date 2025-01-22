@@ -48,3 +48,9 @@ def dispatch_from_gateway_and_broadcast_with_external_running_peer():
     assert "test.txt" in response.headers["Content-Disposition"], "Downloaded file name mismatch"
 
     print("Test dispatch from gateway")
+
+def test_pull_from_gateway():
+    response = client.get("/command/pull/QmPK1s3pNYLi9ERiq3BDxKa4XosgWwFRQUydHUtz4YgpqA/segment_001.ts")
+    
+    assert response.status_code == 200
+    assert "segment_001.ts" in response.headers["Content-Disposition"], "Downloaded file name mismatch"
