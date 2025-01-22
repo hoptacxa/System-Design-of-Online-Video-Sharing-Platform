@@ -26,6 +26,7 @@ class UploadVideoCommandHandler:
         self.video_processing_service = video_processing_service
 
     def handle(self, command: UploadVideoCommand):
+        cid = f"Qm{'1' * 44}"
         # Delegate the creation of video metadata to the aggregate.
         video_file = command.video_file
         # Process the video
@@ -36,8 +37,7 @@ class UploadVideoCommandHandler:
         uploaded_files = []
         for file_path in Path(output_dir).iterdir():
             if file_path.is_file():
-                file_key = f"{command.file_key}/{file_path.name}"
-                file_key = f"computed-{file_key}"
+                file_key = f"{cid}/{file_path.name}"
                 self.file_upload_service.upload_file(
                     file_contents=file_path.read_bytes(),
                     file_key=file_key
