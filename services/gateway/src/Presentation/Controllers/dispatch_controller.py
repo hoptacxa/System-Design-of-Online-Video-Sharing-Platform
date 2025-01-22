@@ -28,7 +28,7 @@ async def command(
                 file_stream,
                 media_type="application/octet-stream",
                 headers={
-                    "Content-Disposition": f"attachment; filename={request.cid}"
+                    "Content-Disposition": f"attachment; filename={request.filename}"
                 }
             )
 

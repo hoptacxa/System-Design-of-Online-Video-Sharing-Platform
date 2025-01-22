@@ -29,19 +29,22 @@ def test_dispatch_from_gateway_and_broadcast():
     def handle_request(data):
         print("Responder nhận được request:", data)
         uuid_val = data.get('uuid')
-        sio_responder.emit('response', {"uuid": uuid_val, "Body": "Response received"})
+        sio_responder.emit('response', {"uuid": uuid_val, "Body": "H4sIADy7kGcAAwvJyCxWKC4tKMgvKilWSMsvUihJLS4pBgAf9235FwAAAA=="})
 
     sio_responder.connect('http://127.0.0.1:3000', {}, responder_registration)
     # 
-    test_dispatch_from_gateway_and_broadcast_with_external_running_peer()
+    dispatch_from_gateway_and_broadcast_with_external_running_peer()
     sio_responder.disconnect()
 
 def test_dispatch_from_gateway_and_broadcast_with_external_running_peer():
-    response = client.get(f"/command/get/{cid}/file1.png")
+    dispatch_from_gateway_and_broadcast_with_external_running_peer()
+
+def dispatch_from_gateway_and_broadcast_with_external_running_peer():
+    response = client.get(f"/command/get/{cid}/test.txt")
     
     assert response.status_code == 200
     assert "Content-Disposition" in response.headers, "Missing 'Content-Disposition' header"
     assert "attachment" in response.headers["Content-Disposition"], "Response is not a file download"
-    assert "file1.png" in response.headers["Content-Disposition"], "Downloaded file name mismatch"
+    assert "test.txt" in response.headers["Content-Disposition"], "Downloaded file name mismatch"
 
     print("Test dispatch from gateway")
