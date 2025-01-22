@@ -69,7 +69,7 @@ class RelayGetFileService:
             start_time = time.time()
             while request_uuid not in self.response_map:
                 if time.time() - start_time > timeout:
-                    raise TimeoutError(f"Timeout khi chờ phản hồi cho UUID {request_uuid}")
+                    return None
                 time.sleep(0.1)
 
             # Lấy response từ response_map
