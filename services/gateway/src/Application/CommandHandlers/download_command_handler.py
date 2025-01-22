@@ -29,9 +29,11 @@ class DownloadCommandHandler:
 
         if file_contents is None:
             file_contents = self.relay_get_file_service.get_file_contents(provider_peer['uuid'], f"{command.cid}/{command.filename}")
+            self.local_cache_get_file_service.add_file(f"{command.cid}/{command.filename}", file_contents)
 
         if file_contents is None:
             file_contents = self.s3_get_file_service.get_file_contents(f"{command.cid}/{command.filename}")
+            self.local_cache_get_file_service.add_file(f"{command.cid}/{command.filename}", file_contents)
 
         if file_contents is None:
             raise Exception(f"Could not download file with CID {command.cid}")
