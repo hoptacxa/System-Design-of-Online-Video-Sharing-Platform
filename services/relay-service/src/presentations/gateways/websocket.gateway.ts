@@ -22,6 +22,9 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     getClients(nodeId: string): Array<Socket> | undefined {
         return this.clients.get(nodeId);
     }
+    getAllClients() {
+        return this.clients;
+    }
     afterInit(server: Server) {
         this.logger.log('WebSocket Gateway initialized');
     }
@@ -40,29 +43,31 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
 
     async handleConnection(@ConnectedSocket() client: Socket) {
         try {
-            let {
-                peerId,
-                accessKeyId,
-                accessSecretKey,
-                storageCapacity,
-                peerAddress,
-            } = client.handshake.auth;
+            const { peerId, accessKeyId, accessSecretKey, storageCapacity, peerAddress } = client.handshake.auth;
             if (typeof peerId !== 'string') {
                 this.logger.debug(client.handshake)
                 // handle reconnect
                 throw new Error('PeerId must be string')
             }
-            const result = await this.commandBus.execute(new RegisterCommand(peerId, accessKeyId, accessSecretKey, storageCapacity, peerAddress));
-            if (this.clients.has(peerId)) {
-                let existsClients = this.clients.get(peerId)
-                existsClients.push(client)
-                this.clients.set(peerId, existsClients)
-            }else{
-                this.clients.set(peerId, [client]);
+
+            // Check if client already exists
+            let existingClients = this.clients.get(peerId) || [];
+            const existingClientIndex = existingClients.findIndex(c => c.id === client.id);
+
+            if (existingClientIndex === -1) {
+                // New connection
+                const result = await this.commandBus.execute(new RegisterCommand(peerId, accessKeyId, accessSecretKey, storageCapacity, peerAddress));
+                existingClients.push(client);
+                this.clients.set(peerId, existingClients);
+                client.emit('register-success', result);
+                this.logger.log(`Client connected: ${client.id} (peerId: ${peerId})`);
+            } else {
+                // Reconnection
+                this.logger.error(`Reconnection detected for client: ${client.id} (peerId: ${peerId})`);
+                throw new Error(`Reconnection detected for client: ${client.id} (peerId: ${peerId})`)
             }
-            client.emit('register-success', result);
         } catch (error) {
-            this.logger.error(error.message + " in " + error.stack);
+            this.logger.error(`Connection error: ${error.message}`, error.stack);
             client.emit('register-error', { message: error.message });
         }
     }

@@ -1,7 +1,8 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { RequestCommand } from '../commands/requestCommand';
-import { RequestAggregate } from '../../domain/aggregates/requestAggregate';
+import { RequestAggregate, RequestStatus } from '../../domain/aggregates/requestAggregate';
 import { InMemoryRequestWriteRepository } from '../../infrastructure/repositories/inMemoryRequestWriteRepository';
+import { InMemoryRequestReadRepository } from '../../infrastructure/repositories/inMemoryRequestReadRepository';
 import { InMemoryPeerReadRepository } from '../../infrastructure/repositories/inMemoryPeerReadRepository';
 import { RequestUuid } from '../../domain/valueobjects/requestUuid';
 import { NodeId } from '../../domain/valueobjects/nodeId';
@@ -13,6 +14,7 @@ export class RequestCommandHandler implements ICommandHandler<RequestCommand> {
     constructor(
         private readonly inMemoryPeerReadRepository: InMemoryPeerReadRepository,
         private readonly websocketGateway: WebsocketGateway,
+        private readonly inMemoryRequestReadRepository: InMemoryRequestReadRepository,
         private readonly inMemoryRequestWriteRepository: InMemoryRequestWriteRepository
     ) {}
     async execute(command: RequestCommand): Promise<any> {
@@ -29,6 +31,22 @@ export class RequestCommandHandler implements ICommandHandler<RequestCommand> {
         this.saveRequest(uuid, requesterId, providerId, payload);
 
         this.forwardRequest(providerId, requesterId, uuid, payload);
+        setTimeout(async () => {
+            let request = this.inMemoryRequestReadRepository.getByUuid(uuid)
+            console.log('request')
+            if (request.status === RequestStatus.PENDING) {
+                console.log('is pending')
+                let clientsMap = this.websocketGateway.getAllClients();
+                for (const [clientKey, clients] of clientsMap.entries()){
+                    console.log(clientKey)
+                    for (let i = 0; i < clients.length; i++) {
+                        const client = clients[i];
+                        console.log('payload', client, payload)
+                        // client.emit("responder-not-found", payload);
+                    }
+                }
+            }
+        }, 10e3);
         return { message: 'Request processed successfully', uuid }
     }
 

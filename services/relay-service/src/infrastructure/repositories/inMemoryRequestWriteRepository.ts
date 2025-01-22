@@ -2,12 +2,14 @@
 import { Injectable } from '@nestjs/common';
 import { RequestAggregate } from '../../domain/aggregates/requestAggregate';
 import { RequestUuid as Uuid } from '../../domain/valueobjects/requestUuid'
+import { NodeId } from '../../domain/valueobjects/nodeId';
+import { RequestPayload } from '../../domain/valueobjects/requestPayload';
 
 @Injectable()
 export class InMemoryRequestWriteRepository {
     // private readonly requests: Map<string, any>;
 
-    constructor(private readonly requests: Map<string, any>) {
+    constructor(private readonly requests: Map<string, {requesterId: string, providerId: string, payload: object, status: string}>) {
     }
 
     // Save a new request to the repository
@@ -33,7 +35,12 @@ export class InMemoryRequestWriteRepository {
     // Find a request by UUID
     async findById(uuid: Uuid): Promise<RequestAggregate | null> {
         const request = this.requests.get(uuid.getValue());
-        return request || null;
+        return request ? new RequestAggregate(
+            uuid, 
+            new NodeId(request.requesterId), 
+            new NodeId(request.providerId), 
+            new RequestPayload(request.payload)
+        ) : null
     }
 
     // Update an existing request
@@ -42,7 +49,12 @@ export class InMemoryRequestWriteRepository {
         if (!this.requests.has(uuid)) {
             throw new Error(`Request with UUID ${uuid} does not exist.`);
         }
-        this.requests.set(uuid, request);
+        this.requests.set(uuid, {
+            requesterId: request.requesterId.value,
+            providerId: request.providerId.value,
+            payload: request.payload,
+            status: request.status,
+        });
     }
 
     // Delete a request by UUID
@@ -51,10 +63,5 @@ export class InMemoryRequestWriteRepository {
             throw new Error(`Request with UUID ${uuid.getValue()} does not exist.`);
         }
         this.requests.delete(uuid.getValue());
-    }
-
-    // Retrieve all requests (for debugging or testing purposes)
-    async findAll(): Promise<RequestAggregate[]> {
-        return Array.from(this.requests.values());
     }
 }

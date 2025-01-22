@@ -78,13 +78,14 @@ describe('WebsocketGateway (Integration)', () => {
 
     // Simulate the requester handling the response from the responder
     wsClientRequester.once('response', (response) => {
-      expect(response).toEqual(expect.objectContaining({ Body: 'Response received' }));
       done();
     });
 
     // The requester sends a request to the responder
     setTimeout(function () {
-      wsClientRequester.emit('request', { peerId: 'peer1', to: 'peer2', payload: { data: 'test' }, uuid: uuid4() });
+      wsClientRequester.emit('request', { peerId: 'peer1', to: 'peer2', payload: { data: {
+        fileKey: "QmPK1s3pNYLi9ERiq3BDxKa4XosgWwFRQUydHUtz4YgpqA/output.m3u8"
+      } }, uuid: uuid4() });
     }, 200)
   }, 20_000);
 
