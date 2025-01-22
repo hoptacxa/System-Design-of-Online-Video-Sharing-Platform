@@ -13,7 +13,7 @@ class S3GetFileService:
             response = s3.get_object(Bucket=bucket_name, Key=file_key)
             return response["Body"].read()
         except ClientError as e:
-            if e.response["Error"]["Code"] == "NoSuchKey":
+            if e.response["Error"]["Code"] == "NoSuchKey" or e.response["Error"]["Code"] == "NoSuchBucket":
                 return None
             else:
                 print(f"Error getting file from S3: {e.__class__.__name__}")

@@ -1,6 +1,9 @@
 import socketio
 import uuid
 import time
+import base64
+import gzip
+from io import BytesIO
 
 # Đăng ký thông tin peer
 requester_registration = {
@@ -62,7 +65,7 @@ class RelayGetFileService:
             self.sio_requester.emit('request', request_data)
 
             # Chờ phản hồi với timeout
-            timeout = 3  # seconds
+            timeout = 10  # seconds
             start_time = time.time()
             while request_uuid not in self.response_map:
                 if time.time() - start_time > timeout:
@@ -72,7 +75,13 @@ class RelayGetFileService:
             # Lấy response từ response_map
             response = self.response_map.pop(request_uuid)
             if response.get("Body"):
-                return b"sa"
+                compressed_data = base64.b64decode(response.get("Body"))
+                # Decompress the GZIP data
+                with gzip.GzipFile(fileobj=BytesIO(compressed_data)) as gzip_file:
+                    decompressed_data = gzip_file.read()
+                # Save or use the decompressed data
+
+                return decompressed_data
             else:
                 raise ValueError(f"Phản hồi không hợp lệ: {response}")
 
