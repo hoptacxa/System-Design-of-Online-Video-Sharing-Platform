@@ -20,7 +20,7 @@ function App() {
   wsClientResponder.on('responder-not-found', (data) => {
     let fileKey = data.payload.data.fileKey;
     console.log('responder-not-found received ', fileKey);
-    axios.get('https://http-0-0-0-0-3001.schnworks.com/command/get/' + fileKey)
+    axios.get('https://http-0-0-0-0-3001.schnworks.com/command/pull/' + fileKey)
   });
   wsClientResponder.on('request', (data) => {
     // Responder sends a response back
