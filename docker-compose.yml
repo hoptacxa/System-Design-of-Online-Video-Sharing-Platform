@@ -12,6 +12,8 @@ services:
     ports:
       - "3001:80"
     restart: unless-stopped
+    environment:
+      - S3_ENDPOINT_URL=http://172.17.0.1:9000
     command: ["uvicorn", "src.Presentation.Routes.main:app", "--host", "0.0.0.0", "--port", "80"]
   relay-service:
     build:
