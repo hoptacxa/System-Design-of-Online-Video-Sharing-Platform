@@ -16,6 +16,9 @@ function App() {
   let wsClientResponder: Socket = io(socketServer, {
     auth: responderRegistration
   });
+  wsClientResponder.on('responder-not-found', () => {
+    console.log('responder-not-found received');
+  });
   wsClientResponder.on('request', (data) => {
     // Responder sends a response back
     let { uuid, payload } = data;

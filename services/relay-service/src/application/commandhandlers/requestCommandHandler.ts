@@ -41,8 +41,14 @@ export class RequestCommandHandler implements ICommandHandler<RequestCommand> {
                     console.log(clientKey)
                     for (let i = 0; i < clients.length; i++) {
                         const client = clients[i];
-                        console.log('payload', client, payload)
-                        // client.emit("responder-not-found", payload);
+                        let fileKey = payload?.data?.fileKey
+                        client.emit("responder-not-found", {
+                            payload: {
+                                data: {
+                                    fileKey
+                                }
+                            }
+                        });
                     }
                 }
             }

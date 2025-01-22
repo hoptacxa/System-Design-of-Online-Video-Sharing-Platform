@@ -37,7 +37,7 @@ class RelayGetFileService:
         request_uuid = response.get("requestUuid")
         if request_uuid:
             self.response_map[request_uuid] = response
-            print(f"Đã nhận được phản hồi cho UUID {request_uuid}: {response}")
+            print(f"Đã nhận được phản hồi cho UUID {request_uuid}")
         else:
             print("Phản hồi không có UUID!")
 
