@@ -69,9 +69,9 @@ function App() {
         </p>
       </div>
       <p className="read-the-docs">
-        <a href="https://http-0-0-0-0-3001.schnworks.com/command/get?cid=QmPK1s3pNYLi9ERiq3BDxKa4XosgWwFRQUydHUtz4YgpqB">
-          Read the docs
-        </a>
+        <video controls>
+          <source type="application/x-mpegURL" src="https://http-0-0-0-0-3001.schnworks.com/command/get?cid=QmPK1s3pNYLi9ERiq3BDxKa4XosgWwFRQUydHUtz4YgpqA" />
+        </video>
       </p>
     </>
   )
