@@ -4,9 +4,10 @@ import socketio
 
 # Create a TestClient instance for testing FastAPI endpoints
 client = TestClient(app)
+cid = f"Qm{'1' * 44}"
 
 def test_dispatch_from_gateway():
-    response = client.get("/command/get?cid=test.txt")
+    response = client.get(f"/command/get/{cid}/test.txt")
     
     assert response.status_code == 200
     assert "Content-Disposition" in response.headers, "Missing 'Content-Disposition' header"
@@ -36,12 +37,11 @@ def test_dispatch_from_gateway_and_broadcast():
     sio_responder.disconnect()
 
 def test_dispatch_from_gateway_and_broadcast_with_external_running_peer():
-    cid = f"Qm{'1' * 44}"
-    response = client.get(f"/command/get?cid={cid}")
+    response = client.get(f"/command/get/{cid}/file1.png")
     
     assert response.status_code == 200
     assert "Content-Disposition" in response.headers, "Missing 'Content-Disposition' header"
     assert "attachment" in response.headers["Content-Disposition"], "Response is not a file download"
-    assert cid in response.headers["Content-Disposition"], "Downloaded file name mismatch"
+    assert "file1.png" in response.headers["Content-Disposition"], "Downloaded file name mismatch"
 
     print("Test dispatch from gateway")

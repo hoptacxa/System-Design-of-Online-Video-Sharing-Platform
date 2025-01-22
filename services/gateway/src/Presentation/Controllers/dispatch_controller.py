@@ -8,14 +8,15 @@ from Presentation.Requests.get_request import GetRequest
 # Initialize the router
 router = APIRouter()
 
-@router.get("/command/get")
+@router.get("/command/get/{cid}/{filename}")
 async def command(
     request: GetRequest = Depends(),
     command_handler: CommandHandler = Depends()
 ):
     try:
         command = DownloadCommand(
-            cid=request.cid
+            cid=request.cid,
+            filename=request.filename
         )
         
         download_bytes = command_handler.handle(command)

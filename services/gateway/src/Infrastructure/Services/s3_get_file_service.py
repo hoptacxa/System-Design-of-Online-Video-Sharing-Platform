@@ -1,12 +1,14 @@
 from boto3 import client
 from botocore.exceptions import ClientError
+import os
+
+S3_ENDPOINT = os.getenv("S3_ENDPOINT_URL", "http://127.0.0.1:9000")
 
 class S3GetFileService:
     def get_file_contents(self, file_key: str) -> bytes:
-        s3_endpoint = "http://172.17.0.1:9000"
         access_key="hao"
         secret_key="nghiemxuan"
-        s3 = client("s3", endpoint_url=s3_endpoint, aws_access_key_id=access_key, aws_secret_access_key=secret_key)
+        s3 = client("s3", endpoint_url=S3_ENDPOINT, aws_access_key_id=access_key, aws_secret_access_key=secret_key)
         bucket_name = "video-upload-service"
         
         try:

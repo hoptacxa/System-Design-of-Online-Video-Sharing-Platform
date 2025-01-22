@@ -31,7 +31,7 @@ class DownloadCommandHandler:
             file_contents = self.peer_get_file_service.get_file_contents(provider_peer['uuid'], command.cid)
 
         if file_contents is None:
-            file_contents = self.relay_get_file_service.get_file_contents(provider_peer['uuid'], command.cid)
+            file_contents = self.relay_get_file_service.get_file_contents(provider_peer['uuid'], f"{command.cid}/{command.filename}")
 
         if file_contents is None:
             raise Exception(f"Could not download file with CID {command.cid}")
