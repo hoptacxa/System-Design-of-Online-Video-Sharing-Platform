@@ -26,7 +26,7 @@ class UploadVideoCommandHandler:
         self.video_processing_service = video_processing_service
 
     def handle(self, command: UploadVideoCommand):
-        cid = f"Qm{'1' * 44}"
+        cid = "QmPK1s3pNYLi9ERiq3BDxKa4XosgWwFRQUydHUtz4YgpqA"
         # Delegate the creation of video metadata to the aggregate.
         video_file = command.video_file
         # Process the video
