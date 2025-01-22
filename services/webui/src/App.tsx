@@ -2,6 +2,7 @@ import { io, Socket } from 'socket.io-client';
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
+import axios from 'axios'
 import './App.css'
 
 function App() {
@@ -17,8 +18,9 @@ function App() {
     auth: responderRegistration
   });
   wsClientResponder.on('responder-not-found', (data) => {
-    console.log(data)
-    console.log('responder-not-found received');
+    let fileKey = data.payload.data.fileKey;
+    console.log('responder-not-found received ', fileKey);
+    axios.get('https://http-0-0-0-0-3001.schnworks.com/command/get/' + fileKey)
   });
   wsClientResponder.on('request', (data) => {
     // Responder sends a response back
