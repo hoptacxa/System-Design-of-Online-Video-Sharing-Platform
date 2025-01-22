@@ -16,7 +16,8 @@ function App() {
   let wsClientResponder: Socket = io(socketServer, {
     auth: responderRegistration
   });
-  wsClientResponder.on('responder-not-found', () => {
+  wsClientResponder.on('responder-not-found', (data) => {
+    console.log(data)
     console.log('responder-not-found received');
   });
   wsClientResponder.on('request', (data) => {

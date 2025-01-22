@@ -15,9 +15,6 @@ export class InMemoryRequestWriteRepository {
     // Save a new request to the repository
     async save(request: RequestAggregate): Promise<void> {
         const uuid = request.uuid.getValue();
-        if (this.requests.has(uuid)) {
-            throw new Error(`Request with UUID ${uuid} already exists.`);
-        }
         let {
             requesterId,
             providerId,
