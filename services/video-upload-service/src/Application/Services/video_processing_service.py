@@ -12,7 +12,7 @@ class VideoProcessingService:
         audio_codec: str = "aac",
         audio_bitrate: str = "64k",
         crf: int = 23,
-        hls_time: int = 5,
+        hls_time: int = 12,
         playlist_type: str = "vod",
         segment_filename_pattern: str = "segment_%03d.ts",
         playlist_name: str = "output.m3u8"

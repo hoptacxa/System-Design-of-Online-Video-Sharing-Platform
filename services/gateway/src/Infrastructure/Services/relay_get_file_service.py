@@ -65,7 +65,7 @@ class RelayGetFileService:
             self.sio_requester.emit('request', request_data)
 
             # Chờ phản hồi với timeout
-            timeout = 10  # seconds
+            timeout = 8  # seconds
             start_time = time.time()
             while request_uuid not in self.response_map:
                 if time.time() - start_time > timeout:
