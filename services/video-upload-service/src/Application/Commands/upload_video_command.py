@@ -1,5 +1,6 @@
 from Domain.ValueObjects.duration import Duration
 from Domain.ValueObjects.resolution import Resolution
+from tempfile import SpooledTemporaryFile
 
 class UploadVideoCommand:
     """
@@ -25,4 +26,4 @@ class UploadVideoCommand:
         self.user_uuid = user_uuid
         self.file_key = file_key
         self.resolution = resolution
-        self.video_file = video_file
+        self.video_file: SpooledTemporaryFile = video_file
