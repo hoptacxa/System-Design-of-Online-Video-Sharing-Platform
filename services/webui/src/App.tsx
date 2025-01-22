@@ -23,7 +23,7 @@ function App() {
     let Body;
     switch (payload.data.fileKey) {
       case 'Qm11111111111111111111111111111111111111111111/test.txt':
-        Body = "This supports for tests";
+        Body = "H4sIADy7kGcAAwvJyCxWKC4tKMgvKilWSMsvUihJLS4pBgAf9235FwAAAA==";
         break;
       case 'QmPK1s3pNYLi9ERiq3BDxKa4XosgWwFRQUydHUtz4YgpqA':
         Body = 'H4sICBRTkGcAA291dHB1dC5tM3U4AIXXzWrCQBRA4X1ew20jmbl3/rILzbQENFqNoitX0lW70fensRCsID3ZBG7O6mMYcmf5MCxlV8zGd3ko93mz7VZ9LdNgaDbveWh3m2a4zeM0X+a2a8pt/tjl/jXX1TRfL5rjotsO5XBc53q/an8/dP1bHeciUjn/UlzOn1/n7+upqqr59fJvYCiwFAgFSoGjwFMQKIgUJAgMSRqSNCRpSNKQpCFJQ5KGJA1JmieSqn8CS5KWJC1JWpK0JGlJ0pKkJUlLkpbOpJCkkKSQpJCkkKSQpJCkkKSQpJCkkqSSpJKkkqSSpJKkkqSSpJKkkqQjSUeSjiQdSTqSdCTpSNKRpCNJR5KeJP0TyYeb1pOkJ0lPkp4kPUl6kvQk6UkykGSgMxlIMpBkIMlAkoEkA0kGkgwkGUkykmQkyUiSkSQjSUaSjCQZSTKSZCLJRJKJJBNJJpJMJJlIMpFkIsn0IGnn4y/J+NwDc99xxu0o9+1tOSp+AEjbKEJ2DQAA'
