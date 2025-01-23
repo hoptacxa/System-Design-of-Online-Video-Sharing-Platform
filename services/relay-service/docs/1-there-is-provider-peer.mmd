@@ -21,4 +21,5 @@ sequenceDiagram
     
     B->>TURN: emit(HTTP Response)
     TURN->>A: Forward HTTP Response
+    A->>Cache: Store Cache
     A->>Client: HTTP Response
