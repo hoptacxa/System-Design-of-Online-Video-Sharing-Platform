@@ -11,8 +11,8 @@ class BroadcastCommandHandler:
         self.node_read_repository = node_read_repository
 
     def handle(self, command: BroadcastCommand) -> dict:
-        node = self.node_read_repository.get_node_by_cid(Cid(command.cid))
-        print(f"The node is broadcasting request for CID {command.cid}...")
+        node = self.node_read_repository.get_node_by_query(command.query)
+        print(f"The node is broadcasting request for CID {command.query}...")
         
         return node
 

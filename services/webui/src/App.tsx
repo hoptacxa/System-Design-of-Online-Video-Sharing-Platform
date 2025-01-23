@@ -26,7 +26,9 @@ function App() {
   // Initialize the global variable with the defined type
   let globalPullResponse: PullResponse = {};
 
-  // wsClientResponder.on('responder-not-found', async (data) => {});
+  wsClientResponder.on('find-by-cid', async (data) => {
+    console.log(data);
+  })
   wsClientResponder.on('request', async (data) => {
     // Responder sends a response back
     let { uuid, payload } = data;
