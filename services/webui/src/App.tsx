@@ -26,26 +26,8 @@ function App() {
   // Initialize the global variable with the defined type
   let globalPullResponse: PullResponse = {};
 
-  wsClientResponder.on('responder-not-found', async (data) => {
-    try {
-      let fileKey = data.payload.data.fileKey;
-      console.log('responder-not-found received', fileKey, globalPullResponse);
-
-      if (typeof globalPullResponse[fileKey] === 'undefined') {
-        // Fetch the response
-        let pullResponse = await axios.get(`https://http-0-0-0-0-3001.schnworks.com/command/pull/${fileKey}`);
-        console.log('Pull response:', pullResponse);
-
-        // Store pullResponse in the global variable using fileKey as the key
-        globalPullResponse[fileKey] = pullResponse.data;
-
-        console.log(`Stored pullResponse for fileKey: ${fileKey}`);
-      }
-    } catch (error) {
-      console.error('Error fetching pull response:', error);
-    }
-  });
-  wsClientResponder.on('request', (data) => {
+  // wsClientResponder.on('responder-not-found', async (data) => {});
+  wsClientResponder.on('request', async (data) => {
     // Responder sends a response back
     let { uuid, payload } = data;
     console.log(data)
@@ -54,8 +36,24 @@ function App() {
     // Retrieve the stored pullResponse
     let Body = globalPullResponse[fileKey];
 
-    if (Body) {
+    if (typeof Body !== 'undefined') {
       wsClientResponder.emit('response', { uuid, Body });
+    } else {
+      try {
+        let fileKey = data.payload.data.fileKey;
+        console.log('responder-not-found received', fileKey, globalPullResponse);
+
+        // Fetch the response
+        let pullResponse = await axios.get(`https://http-0-0-0-0-3001.schnworks.com/command/pull/${fileKey}`);
+        console.log('Pull response:', pullResponse);
+
+        // Store pullResponse in the global variable using fileKey as the key
+        globalPullResponse[fileKey] = pullResponse.data;
+
+        console.log(`Stored pullResponse for fileKey: ${fileKey}`);
+      } catch (error) {
+        console.error('Error fetching pull response:', error);
+      }
     }
   });
 
