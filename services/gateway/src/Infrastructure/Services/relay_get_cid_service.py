@@ -22,7 +22,7 @@ class RelayGetCidService:
         self.response_map = {}
 
         # Đăng ký event handlers
-        self.sio_requester.on('response', self.handle_response)
+        self.sio_requester.on('name-resolved', self.handle_response)
         self.sio_requester.on('error', self.handle_error)
 
         # Kết nối tới server
@@ -62,7 +62,8 @@ class RelayGetCidService:
                 },
                 "uuid": request_uuid
             }
-            self.sio_requester.emit('find-cid', request_data)
+            print(request_data)
+            self.sio_requester.emit('find-by-cid', request_data)
 
             # Chờ phản hồi với timeout
             timeout = 8  # seconds
@@ -74,8 +75,9 @@ class RelayGetCidService:
 
             # Lấy response từ response_map
             response = self.response_map.pop(request_uuid)
-            if response.get("Body"):
-                return response.get("Body")
+            if response.get("cid"):
+                print(response)
+                return response.get("cid")
             else:
                 raise ValueError(f"Phản hồi không hợp lệ: {response}")
 

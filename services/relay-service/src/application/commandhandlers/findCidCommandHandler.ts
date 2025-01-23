@@ -60,7 +60,7 @@ export class FindCidCommandHandler implements ICommandHandler<RequestCommand> {
         }
         for (let i = 0; i < clients.length; i++) {
             const client = clients[i];
-            client.emit("find-cid", {payload, requesterId, uuid});
+            client.emit("find-by-cid", {payload, requesterId, uuid});
         }
     }
 }

@@ -27,7 +27,7 @@ class RelayGetFileService:
 
         # Kết nối tới server
         try:
-            self.sio_requester.connect('http://127.0.0.1:3000', {}, requester_registration)
+            self.sio_requester.connect('http://127.0.0.1:3000', {}, requester_registration, retry=True, wait_timeout=5)
         except Exception as e:
             print(f"Không thể kết nối tới server: {e}")
             raise e

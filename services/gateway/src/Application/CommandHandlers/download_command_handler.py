@@ -23,7 +23,7 @@ class DownloadCommandHandler:
     def handle(self, command: DownloadCommand) -> bytes:
         file_contents = self.local_cache_get_file_service.get_file_contents(f"{command.cid}/{command.filename}")
         broadcast_command = BroadcastCommand(
-            cid=command.cid
+            query=command.cid
         )
         provider_peer = self.broadcast_command_handler.handle(broadcast_command)
 
@@ -36,6 +36,6 @@ class DownloadCommandHandler:
             self.local_cache_get_file_service.add_file(f"{command.cid}/{command.filename}", file_contents)
 
         if file_contents is None:
-            raise Exception(f"Could not download file with CID {command.cid}")
+            raise Exception(f"Could not download file with CID {command.cid}/{command.filename}")
 
         return file_contents

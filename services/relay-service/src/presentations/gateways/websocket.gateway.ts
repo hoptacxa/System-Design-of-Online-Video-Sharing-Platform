@@ -6,6 +6,7 @@ import { RegisterCommand } from '../../application/commands/registerCommand'
 import { RequestCommand } from '../../application/commands/requestCommand';
 import { ResponseCommand } from '../../application/commands/responseCommand';
 import { FindCidCommand } from '../../application/commands/findCidCommand';
+import { ResponseNameResolutionCommand } from '../../application/commands/responseNameResolutionCommand';
 
 @WebSocketGateway({
     cors: {
@@ -72,15 +73,16 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         }
     }
 
-    @SubscribeMessage('find-cid')
+    @SubscribeMessage('find-by-cid')
     async handleFindCid(@MessageBody() data: { peerId: string; to: string; payload: any; uuid: string }, @ConnectedSocket() client: Socket) {
+        console.log('find-by-cid', data)
         try {
             const result = await this.commandBus.execute(new FindCidCommand(data.uuid, data.peerId, data.to, data.payload));
-            client.emit('find-cid-success', result);
+            client.emit('find-by-cid-success', result);
         } catch (error) {
             console.log(error)
             this.logger.error(error)
-            client.emit('find-cid-error', { message: error.message });
+            client.emit('find-by-cid-error', { message: error.message });
         }
     }
 
@@ -96,6 +98,17 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         }
     }
 
+    @SubscribeMessage('name-resolved')
+    async handleNameResolution(@MessageBody() data: { Cid: string, uuid: string }, @ConnectedSocket() client: Socket) {
+        console.log("res", data)
+        try {
+            await this.commandBus.execute(new ResponseNameResolutionCommand(data.uuid, data.Cid));
+        } catch (error) {
+            console.log(error)
+            this.logger.error(error)
+            client.emit('response-error', { message: error.message });
+        }
+    }
     @SubscribeMessage('response')
     async handleResponse(@MessageBody() data: { Body: any, uuid: string }, @ConnectedSocket() client: Socket) {
         console.log("res")
