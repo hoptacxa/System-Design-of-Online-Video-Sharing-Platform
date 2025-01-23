@@ -1,0 +1,24 @@
+sequenceDiagram
+    participant Client as Client (Browser)
+    participant A as Peer A (Requester Peer - Gateway)
+    participant Cache as Local Cache
+    participant TURN as Relay Server
+    participant B as Peer B (Provider Peer)
+    participant Origin as S3 Service
+
+    Client->>A: HTTP Request
+
+    Cache->>A: Don't have cached CID
+
+    A->>TURN: emit(request object)
+    TURN->>B: Forward HTTP object
+    
+    B->>A: No HTTP Response - Timeout after 8 seconds
+    A->>Origin: HTTP Request
+    Origin->>A: HTTP Request
+    A->>Cache: Store cache
+    A->>Client: HTTP Response
+
+    B->>A: HTTP Request (Pull command)
+    Cache->>A: Get cached content
+    A->>B: Store file in-memory

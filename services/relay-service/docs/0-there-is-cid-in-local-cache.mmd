@@ -1,0 +1,12 @@
+sequenceDiagram
+    participant Client as Client (Browser)
+    participant A as Peer A (Requester Peer - Gateway)
+    participant Cache as Local Cache
+            
+    Client->>A: HTTP Request
+
+    A->>Cache: Check if CID in cache
+    Cache->>A: Have CID in cache
+
+    
+    A->>Client: HTTP Response
