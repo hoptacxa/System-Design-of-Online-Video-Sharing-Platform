@@ -35,7 +35,7 @@ class DownloadByNameCommandHandler:
             cid = self.relay_get_cid_service.get_cid_by_name(provider_peer, command.name)
 
         if cid is None:
-            raise Exception("")
+            raise Exception(f"CID not found for {command.name}")
 
         download_command = DownloadCommand(
             cid=cid,

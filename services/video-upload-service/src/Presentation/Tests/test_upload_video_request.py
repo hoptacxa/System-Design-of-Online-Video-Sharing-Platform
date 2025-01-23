@@ -14,28 +14,27 @@ app.dependency_overrides[DatabaseEngine] = lambda: database_engine
 
 # Test: successful video upload
 def test_successful_video_upload():
-    tmp_path = Path("/tmp")
-    filename = tmp_path / "test.mp4"
+    filename = Path("./LwekZs3Sp8g.webm")
     # write a binary file to test the video upload
-    filename.write_bytes(b"<file content>")
     with filename.open("rb") as file:
         response = client.post(
             "/upload_video/",
             data={
-                "title": "test",
+                "title": "LwekZs3Sp8g",
+                "name": "LwekZs3Sp8g",
                 "description": "test",
                 "duration": 1,
                 "resolution": "1080p",
-                "file_key": "test.txt"
+                "file_key": "LwekZs3Sp8g.webm"
             },
             files={"video_file": ("test.mp4", file)},
         )
     
     # delete the file
-    filename.unlink()
+    # filename.unlink()
     # Assert the status code is 200 (OK)
     print(response.json())
     assert response.status_code == 200
     assert response.json()["message"] == "Video uploaded successfully"
-    assert response.json()["video_metadata"]["public_url"] == "http://localhost:9000/video-upload-service/test.txt"
+    assert response.json()["video_metadata"]["public_url"] == "http://localhost:9000/video-upload-service/LwekZs3Sp8g.webm"
     
