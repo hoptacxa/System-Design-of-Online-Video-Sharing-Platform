@@ -33,9 +33,12 @@ function App() {
     console.log(data);
     let { uuid, payload } = data;
     let name = payload.data.name
+    name = 'name'
 
     let cid = globalNameResolution[name]
-    wsClientResponder.emit('name-resolved', { uuid, Cid: cid });
+    if (cid) {
+      wsClientResponder.emit('name-resolved', { uuid, Cid: cid });
+    }
   })
   wsClientResponder.on('request', async (data) => {
     // Responder sends a response back
