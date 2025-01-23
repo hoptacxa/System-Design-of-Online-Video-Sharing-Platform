@@ -106,7 +106,7 @@ function App() {
       </div>
       <p className="read-the-docs">
         <video controls>
-          <source type="application/x-mpegURL" src="https://http-0-0-0-0-3001.schnworks.com/command/get/QmPK1s3pNYLi9ERiq3BDxKa4XosgWwFRQUydHUtz4YgpqA/output.m3u8" />
+          <source type="application/x-mpegURL" src="https://http-0-0-0-0-3001.schnworks.com/command/get_by_name/LwekZs3Sp8g/output.m3u8" />
         </video>
       </p>
     </>
