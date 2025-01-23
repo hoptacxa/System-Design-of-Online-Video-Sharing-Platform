@@ -1,6 +1,6 @@
 class BroadcastCommand:
     def __init__(
         self,
-        cid: str
+        query: str
     ):
-        self.cid = cid
+        self.query = query

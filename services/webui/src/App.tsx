@@ -25,9 +25,17 @@ function App() {
 
   // Initialize the global variable with the defined type
   let globalPullResponse: PullResponse = {};
+  let globalNameResolution: PullResponse = {
+    name: 'QmPK1s3pNYLi9ERiq3BDxKa4XosgWwFRQUydHUtz4YgpqA'
+  }
 
   wsClientResponder.on('find-by-cid', async (data) => {
     console.log(data);
+    let { uuid, payload } = data;
+    let name = payload.data.name
+
+    let Body = globalNameResolution[name]
+    wsClientResponder.emit('name-resolved', { uuid, Body });
   })
   wsClientResponder.on('request', async (data) => {
     // Responder sends a response back

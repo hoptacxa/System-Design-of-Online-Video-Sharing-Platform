@@ -6,6 +6,7 @@ import { Module } from '@nestjs/common';
 import { WebsocketGateway } from './presentations/gateways/websocket.gateway'
 import { CqrsModule } from '@nestjs/cqrs';
 import { RegisterCommandHandler } from './application/commandhandlers/registerCommandHandler'
+import { FindCidCommandHandler } from './application/commandhandlers/findCidCommandHandler'
 import { RequestCommandHandler } from './application/commandhandlers/requestCommandHandler'
 import { ResponseCommandHandler } from './application/commandhandlers/responseCommandHandler'
 import { InMemoryPeerWriteRepository } from './infrastructure/repositories/inMemoryPeerWriteRepository'
@@ -32,7 +33,7 @@ const sharedUsers = [
   imports: [CqrsModule.forRoot()],
   controllers: [],
   exports: [WebsocketGateway],
-  providers: [WebsocketGateway, RegisterCommandHandler, RequestCommandHandler, ResponseCommandHandler,
+  providers: [WebsocketGateway, FindCidCommandHandler, RegisterCommandHandler, RequestCommandHandler, ResponseCommandHandler,
     // Repositories
     {
       provide: InMemoryRequestWriteRepository,

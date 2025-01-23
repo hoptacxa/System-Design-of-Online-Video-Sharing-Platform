@@ -11,3 +11,6 @@ class NodeReadRepository:
         ]
     def get_node_by_cid(self, cid: Cid) -> dict:
         return self._nodes[0]
+
+    def get_node_by_query(self, query: str) -> dict:
+        return self._nodes[0]

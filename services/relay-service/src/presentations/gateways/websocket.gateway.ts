@@ -5,7 +5,7 @@ import { CommandBus } from '@nestjs/cqrs';
 import { RegisterCommand } from '../../application/commands/registerCommand'
 import { RequestCommand } from '../../application/commands/requestCommand';
 import { ResponseCommand } from '../../application/commands/responseCommand';
-import { v4 as uuidv4 } from 'uuid';
+import { FindCidCommand } from '../../application/commands/findCidCommand';
 
 @WebSocketGateway({
     cors: {
@@ -69,6 +69,18 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         } catch (error) {
             this.logger.error(`Connection error: ${error.message}`, error.stack);
             client.emit('register-error', { message: error.message });
+        }
+    }
+
+    @SubscribeMessage('find-cid')
+    async handleFindCid(@MessageBody() data: { peerId: string; to: string; payload: any; uuid: string }, @ConnectedSocket() client: Socket) {
+        try {
+            const result = await this.commandBus.execute(new FindCidCommand(data.uuid, data.peerId, data.to, data.payload));
+            client.emit('find-cid-success', result);
+        } catch (error) {
+            console.log(error)
+            this.logger.error(error)
+            client.emit('find-cid-error', { message: error.message });
         }
     }
 
