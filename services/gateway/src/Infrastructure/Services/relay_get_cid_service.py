@@ -46,7 +46,7 @@ class RelayGetCidService:
         print(f"Lỗi xảy ra: {error}")
         raise Exception(f"Unexpected error: {error}")
 
-    def get_cid_by_name(self, provider_peer_uuid: str, name: str) -> bytes:
+    def get_cid_by_name(self, provider_peer_uuid: str, name: str) -> str:
         """Gửi yêu cầu lấy file và chờ phản hồi."""
         try:
             # Tạo UUID cho request này

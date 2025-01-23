@@ -1,4 +1,5 @@
-class LocalCacheGetFileService:
+from .singleton_metadata import SingletonMeta
+class LocalCacheGetFileService(metaclass=SingletonMeta):
     def __init__(self):
         # In-memory dictionary to store file contents
         self.cache = {}

@@ -13,10 +13,9 @@ class DownloadCommandHandler:
         broadcast_command_handler: BroadcastCommandHandler = Depends(),
         relay_get_file_service: RelayGetFileService = Depends(),
         s3_get_file_service: S3GetFileService = Depends(),
-        local_cache_get_file_service: LocalCacheGetFileService = Depends()
     ):
         self.s3_get_file_service = s3_get_file_service
-        self.local_cache_get_file_service = local_cache_get_file_service
+        self.local_cache_get_file_service = LocalCacheGetFileService()
         self.broadcast_command_handler = broadcast_command_handler
         self.relay_get_file_service = relay_get_file_service
 

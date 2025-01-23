@@ -10,10 +10,9 @@ class PullCommandHandler:
     def __init__(
         self,
         s3_get_file_service: S3GetFileService = Depends(),
-        local_cache_get_file_service: LocalCacheGetFileService = Depends()
     ):
         self.s3_get_file_service = s3_get_file_service
-        self.local_cache_get_file_service = local_cache_get_file_service
+        self.local_cache_get_file_service = LocalCacheGetFileService()
 
     def handle(self, command: DownloadCommand) -> bytes:
         file_contents = self.local_cache_get_file_service.get_file_contents(f"{command.cid}/{command.filename}")
