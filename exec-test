@@ -2,4 +2,4 @@
 set -xeo pipefail
 
 echo $@ > "./last-test-matcher.txt"
-PYTHONPATH=./services/video-upload-service/src pytest --maxfail=1 $@
+PYTHONPATH="$(echo "$@" | cut -d'/' -f1-3)/src" pytest --maxfail=1 $@

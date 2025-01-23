@@ -12,6 +12,7 @@ class UploadVideoCommand:
         self,
         uuid: str,
         title: str,
+        name: str,
         description: str,
         duration: int,
         resolution: str,
@@ -21,6 +22,7 @@ class UploadVideoCommand:
     ):
         self.uuid = uuid
         self.title = title
+        self.name = name
         self.description = description
         self.duration = duration
         self.user_uuid = user_uuid
