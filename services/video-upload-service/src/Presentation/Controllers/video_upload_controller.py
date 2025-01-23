@@ -19,6 +19,7 @@ async def upload_video(
         command = UploadVideoCommand(
             uuid=uuid4(),
             title=request.title,
+            name=request.name,
             description=request.description,
             resolution=request.resolution,
             duration=request.duration,

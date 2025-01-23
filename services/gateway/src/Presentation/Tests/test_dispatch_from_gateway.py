@@ -54,3 +54,12 @@ def test_pull_from_gateway():
     
     assert response.status_code == 200
     assert "segment_001.ts" in response.headers["Content-Disposition"], "Downloaded file name mismatch"
+
+def test_naming_service():
+    response = client.get("/command/get/QmPK1s3pNYLi9ERiq3BDxKa4XosgWwFRQUydHUtz4YgpqA/metadata/names/0/n")
+    assert response.status_code == 200
+    assert "segment_001.ts" in response.headers["Content-Disposition"], "Downloaded file name mismatch"
+
+    response = client.get("/command/get/n/output.m3u8")
+    assert response.status_code == 200
+    assert "segment_001.ts" in response.headers["Content-Disposition"], "Downloaded file name mismatch"
