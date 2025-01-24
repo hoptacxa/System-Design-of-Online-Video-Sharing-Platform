@@ -4,17 +4,20 @@ import axios from 'axios'
 import './App.css'
 import VideoJS from './VideoPlayer'
 import videojs from 'video.js';
+import { useLocation } from 'react-router-dom';
 
 function App() {
+  const location = useLocation(); // Trả về object location
   const playerRef = React.useRef(null);
-
+  let {pathname} = location
+  let trimmedPathname = pathname.replace(/^\//,'')
   const videoJsOptions = {
     autoplay: true,
     controls: true,
     responsive: true,
     fluid: true,
     sources: [{
-      src: 'https://http-0-0-0-0-3001.schnworks.com/command/get_by_name/LwekZs3Sp8g/output.m3u8',
+      src: `https://http-0-0-0-0-3001.schnworks.com/command/get_by_name/${trimmedPathname}/output.m3u8`,
     }]
   };
 
