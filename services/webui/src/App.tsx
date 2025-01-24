@@ -1,9 +1,36 @@
 import { io, Socket } from 'socket.io-client';
-// import { useState } from 'react'
+import React from 'react'
 import axios from 'axios'
 import './App.css'
+import VideoJS from './VideoPlayer'
+import videojs from 'video.js';
 
 function App() {
+  const playerRef = React.useRef(null);
+
+  const videoJsOptions = {
+    autoplay: true,
+    controls: true,
+    responsive: true,
+    fluid: true,
+    sources: [{
+      src: 'https://http-0-0-0-0-3001.schnworks.com/command/get_by_name/LwekZs3Sp8g/output.m3u8',
+    }]
+  };
+
+  const handlePlayerReady = (player: any) => {
+    playerRef.current = player;
+
+    // You can handle player events here, for example:
+    player.on('waiting', () => {
+      videojs.log('player is waiting');
+    });
+
+    player.on('dispose', () => {
+      videojs.log('player will dispose');
+    });
+  };
+
   const socketServer = 'https://http-0-0-0-0-3000.schnworks.com/'
   const responderRegistration = {
     peerId: 'peer2',
@@ -70,9 +97,7 @@ function App() {
 
   return (
     <>
-      <video controls>
-        <source type="application/x-mpegURL" src="https://http-0-0-0-0-3001.schnworks.com/command/get_by_name/LwekZs3Sp8g/output.m3u8" />
-      </video>
+      <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
     </>
   )
 }
